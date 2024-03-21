@@ -54,4 +54,17 @@ public class Employee {
 	@ManyToOne
 	@JoinColumn(name = "company_id", nullable = false)
 	private Company company;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof Employee)) {
+			return false;
+		}
+		Employee emp = (Employee) obj;
+		return this.getCompany().getId() == emp.getCompany().getId() && this.getName().equals(emp.getName())
+				&& this.getSurname().equals(emp.getSurname());
+	}
 }
