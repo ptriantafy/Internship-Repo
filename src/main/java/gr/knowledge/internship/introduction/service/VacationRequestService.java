@@ -1,7 +1,10 @@
 package gr.knowledge.internship.introduction.service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -32,20 +35,25 @@ public class VacationRequestService {
 		if (vacationRequestHolidayDTO.getHolidays() < 0) {
 			throw new IllegalArgumentException("Holidays cannot be negative");
 		}
-//		remove holidays from vacation_days
-		int days = (int) (vacationRequestHolidayDTO.getStartDate().until(vacationRequestHolidayDTO.getEndDate(),
-				ChronoUnit.DAYS) - vacationRequestHolidayDTO.getHolidays() + 1);
-		vacationRequestHolidayDTO.setDays(days);
-		vacationRequestHolidayDTO.setStatus(VacationStatus.PENDING);
-		if (vacationRequestHolidayDTO.getDays() > vacationRequestHolidayDTO.getEmployee().getVacationDays()) {
-//		not enough vacation_days
+		if (automaticReject(vacationRequestHolidayDTO)) {
 			vacationRequestHolidayDTO.setStatus(VacationStatus.REJECTED);
+			vacationRequestRepository.save(modelMapper.map(vacationRequestHolidayDTO, VacationRequest.class));
+			return vacationRequestHolidayDTO;
 		}
-		vacationRequestRepository
-				.save(new VacationRequest(vacationRequestHolidayDTO.getId(), vacationRequestHolidayDTO.getEmployee(),
-						vacationRequestHolidayDTO.getStartDate(), vacationRequestHolidayDTO.getEndDate(),
-						vacationRequestHolidayDTO.getStatus(), vacationRequestHolidayDTO.getDays()));
+		vacationRequestHolidayDTO.setStatus(VacationStatus.PENDING);
+		vacationRequestRepository.save(modelMapper.map(vacationRequestHolidayDTO, VacationRequest.class));
 		return vacationRequestHolidayDTO;
+	}
+
+	public boolean automaticReject(VacationRequestHolidayDTO vacationRequestHolidayDTO) {
+//		remove holidays from vacation_days
+		int days = (int) (ChronoUnit.DAYS.between(vacationRequestHolidayDTO.getStartDate(),
+				vacationRequestHolidayDTO.getStartDate()) - vacationRequestHolidayDTO.getHolidays());
+		vacationRequestHolidayDTO.setDays(days);
+		if (vacationRequestHolidayDTO.getDays() > vacationRequestHolidayDTO.getEmployee().getVacationDays()) {
+			return true;
+		}
+		return false;
 	}
 
 	public List<VacationRequestDTO> getAllVacationRequests() {
@@ -59,28 +67,35 @@ public class VacationRequestService {
 		return modelMapper.map(vacationRequest, VacationRequestDTO.class);
 	}
 
-//	TODO less spaghetti
+//		suppose only valid input for now
 	public VacationRequestDTO updateVacationRequest(VacationRequestDTO vacationRequestDTO) {
-//		save status temporarily
-		VacationRequestDTO dbData = modelMapper.map(
-				vacationRequestRepository.findById((int) (long) vacationRequestDTO.getId()).get(),
-				VacationRequestDTO.class);
-//		if accepting/rejecting a pending request
-		try {
-			if (!vacationRequestDTO.getStatus().equals(dbData.getStatus())) {
-//			if accepting, try removing available days from employee
-				if (vacationRequestDTO.getStatus().equals(VacationStatus.APPROVED)) {
-					employeeService.removeVacationDays((int) (long) dbData.getEmployee().getId(), dbData.getDays());
-				}
-				dbData.setStatus(vacationRequestDTO.getStatus().toString());
-				vacationRequestDTO = dbData;
-			}
-		} catch (NullPointerException npe) {
-			return null;
-		}
-		vacationRequestRepository.save(modelMapper.map(vacationRequestDTO, VacationRequest.class));
+		Map<VacationStatus, Function<VacationRequestDTO, VacationRequestDTO>> responseMap = new HashMap<>();
+		responseMap.put(VacationStatus.APPROVED, this::approveVacationRequest);
+		responseMap.put(VacationStatus.PENDING, this::pendingVacationRequestDTO);
+		responseMap.put(VacationStatus.REJECTED, this::rejectVacationRequestDTO);
+		vacationRequestDTO = responseMap.get(vacationRequestDTO.getStatus()).apply(vacationRequestDTO);
 		return vacationRequestDTO;
+	}
 
+	public VacationRequestDTO approveVacationRequest(VacationRequestDTO requestDTO) {
+		try {
+			this.employeeService.removeVacationDays((int) (long) requestDTO.getEmployee().getId(),
+					requestDTO.getDays());
+		} catch (IllegalArgumentException iae) {
+			requestDTO.setStatus(VacationStatus.REJECTED);
+			return requestDTO;
+		}
+		return requestDTO;
+	}
+
+//		temporary method
+	public VacationRequestDTO rejectVacationRequestDTO(VacationRequestDTO requestDTO) {
+		return requestDTO;
+	}
+
+//	temporary method
+	public VacationRequestDTO pendingVacationRequestDTO(VacationRequestDTO requestDTO) {
+		return requestDTO;
 	}
 
 	public boolean deleteVacationRequest(VacationRequestDTO vacationRequestDTO) {
