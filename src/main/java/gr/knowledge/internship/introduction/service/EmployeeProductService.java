@@ -2,6 +2,7 @@ package gr.knowledge.internship.introduction.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -53,10 +54,10 @@ public class EmployeeProductService {
 
 	public Map<String, List<ProductDTO>> getCompanyProducts(int companyId) {
 		// get all company employee-products
-		List<EmployeeProductDTO> employeeProductList = modelMapper.map(
+		Set<EmployeeProductDTO> employeeProductList = modelMapper.map(
 				employeeProductRepository.findAll().stream()
-						.filter(e -> e.getEmployee().getCompany().getId() == companyId).collect(Collectors.toList()),
-				new TypeToken<List<EmployeeProductDTO>>() {
+						.filter(e -> e.getEmployee().getCompany().getId() == companyId).collect(Collectors.toSet()),
+				new TypeToken<Set<EmployeeProductDTO>>() {
 				}.getType());
 
 		Map<String, List<ProductDTO>> outMap = employeeProductList.stream()
