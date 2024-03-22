@@ -15,8 +15,8 @@ import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.entity.Bonus;
 import gr.knowledge.internship.introduction.entity.BonusBySeason;
 import gr.knowledge.internship.introduction.exception.SeasonNotFoundException;
-import gr.knowledge.internship.introduction.parameterobject.CalculateBonusParameter;
-import gr.knowledge.internship.introduction.parameterobject.CompanyBonusParameter;
+import gr.knowledge.internship.introduction.filtering.CalculateBonusFilter;
+import gr.knowledge.internship.introduction.filtering.CompanyBonusFilter;
 import gr.knowledge.internship.introduction.repository.BonusRepository;
 import jakarta.transaction.Transactional;
 
@@ -38,7 +38,7 @@ public class BonusService {
 		return bonusDTO;
 	}
 
-	public BigDecimal calculateBonus(CalculateBonusParameter parameter) {
+	public BigDecimal calculateBonus(CalculateBonusFilter parameter) {
 		if (parameter.getSalary().compareTo(BigDecimal.ZERO) < 0) {
 			throw new IllegalArgumentException("Salary cannot be negative.");
 		}
@@ -70,7 +70,7 @@ public class BonusService {
 		return true;
 	}
 
-	public List<BonusDTO> createCompanyBonus(CompanyBonusParameter companyParameter) {
+	public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyParameter) {
 		BonusBySeason seasonEnum;
 		try {
 			seasonEnum = BonusBySeason.valueOf(companyParameter.getSeason().toUpperCase());

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.knowledge.internship.introduction.dto.BonusDTO;
-import gr.knowledge.internship.introduction.parameterobject.CalculateBonusParameter;
-import gr.knowledge.internship.introduction.parameterobject.CompanyBonusParameter;
+import gr.knowledge.internship.introduction.filtering.CalculateBonusFilter;
+import gr.knowledge.internship.introduction.filtering.CompanyBonusFilter;
 import gr.knowledge.internship.introduction.service.BonusService;
 
 @RestController
@@ -33,7 +33,7 @@ public class BonusController {
     }
     
     @GetMapping("/calculate-bonus")
-    public BigDecimal calculateBonus(CalculateBonusParameter calculateBonusParameter) {
+    public BigDecimal calculateBonus(CalculateBonusFilter calculateBonusParameter) {
     	return bonusService.calculateBonus(calculateBonusParameter);
     }
     
@@ -43,7 +43,7 @@ public class BonusController {
     }
 
     @PostMapping("/company-bonus")
-    public List<BonusDTO> createCompanyBonus(CompanyBonusParameter companyBonusParameter){
+    public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyBonusParameter){
     	return bonusService.createCompanyBonus(companyBonusParameter);
     }
     @PostMapping("/save-bonus")
