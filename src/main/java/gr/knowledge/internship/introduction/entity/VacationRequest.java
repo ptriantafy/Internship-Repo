@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,6 +39,7 @@ public class VacationRequest {
 	@Column(name = "end_date", nullable = false)
 	private LocalDate endDate;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "status", length = 20, nullable = false)
 	private VacationStatus status;
 
