@@ -32,7 +32,7 @@ public class BonusController {
         return bonusService.getAllBonus();
     }
     
-    @GetMapping("/calculate-bonus")
+    @GetMapping("/bonus-calculation")
     public BigDecimal calculateBonus(CalculateBonusFilter calculateBonusParameter) {
     	return bonusService.calculateBonus(calculateBonusParameter);
     }
@@ -46,17 +46,17 @@ public class BonusController {
     public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyBonusParameter){
     	return bonusService.createCompanyBonus(companyBonusParameter);
     }
-    @PostMapping("/save-bonus")
+    @PostMapping("/bonus-save")
     public BonusDTO saveBonus(@RequestBody BonusDTO bonusDTO){
         return bonusService.saveBonus(bonusDTO);
     }
 
-    @PutMapping("/update-bonus")
+    @PutMapping("/bonus-update")
     public BonusDTO updateBonus(@RequestBody BonusDTO bonusDTO){
         return bonusService.updateBonus(bonusDTO);
     }
 
-    @DeleteMapping("/delete-bonus")
+    @DeleteMapping("/bonus-deletion")
     public boolean deleteBonus(@RequestBody BonusDTO bonusDTO){
         return bonusService.deleteBonus(bonusDTO);
     }

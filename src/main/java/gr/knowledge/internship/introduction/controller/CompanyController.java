@@ -32,17 +32,17 @@ public class CompanyController {
     	return companyService.getMonthlyExpenses(companyId);
     }
     
-    @PostMapping("/save-company")
+    @PostMapping("/company-save")
     public CompanyDTO saveCompany(@RequestBody CompanyDTO companyDTO){
         return companyService.saveCompany(companyDTO);
     }
 
-    @PutMapping("/update-company")
+    @PutMapping("/company-update")
     public CompanyDTO updateCompany(@RequestBody CompanyDTO companyDTO){
         return companyService.updateCompany(companyDTO);
     }
 
-    @DeleteMapping("/delete-company")
+    @DeleteMapping("/company-deletion")
     public boolean deleteCompany(@RequestBody CompanyDTO companyDTO){
         return companyService.deleteCompany(companyDTO);
     }

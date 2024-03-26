@@ -40,17 +40,17 @@ public class EmployeeProductController {
     public EmployeeProductDTO getEmployeeProductById(@PathVariable int employeeProductId) {
     	return employeeProductService.getEmployeeProductById(employeeProductId);
     }
-    @PostMapping("/save-employee-product")
+    @PostMapping("/employee-product-save")
     public EmployeeProductDTO saveEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
         return employeeProductService.saveEmployeeProduct(employeeProductDTO);
     }
 
-    @PutMapping("/update-employee-product")
+    @PutMapping("/employee-product-update")
     public EmployeeProductDTO updateEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
         return employeeProductService.updateEmployeeProduct(employeeProductDTO);
     }
 
-    @DeleteMapping("/delete-employee-product")
+    @DeleteMapping("/employee-product-deletion")
     public boolean deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
         return employeeProductService.deleteEmployeeProduct(employeeProductDTO);
     }

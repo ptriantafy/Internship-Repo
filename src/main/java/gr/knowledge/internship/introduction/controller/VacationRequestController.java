@@ -35,17 +35,17 @@ public class VacationRequestController {
 		return vacationRequestService.getVacationRequestById(vacationRequestId);
 	}
 
-	@PutMapping("/update-vacation-request")
+	@PutMapping("/vacation-request-update")
 	public VacationRequestDTO updateVacationRequest(@RequestBody VacationRequestDTO vacationRequestDTO) {
 		return vacationRequestService.updateVacationRequest(vacationRequestDTO);
 	}
 
-	@PostMapping("/save-vacation-request")
+	@PostMapping("/vacation-request-save")
 	public VacationRequestHolidayDTO saveVacationRequest(@RequestBody VacationRequestHolidayDTO vacationRequestHolidayDTO) {
 		return vacationRequestService.saveVacationRequest(vacationRequestHolidayDTO);
 	}
 
-	@DeleteMapping("/delete-vacation-request")
+	@DeleteMapping("/vacation-request-deletion")
 	public boolean deleteVacationRequest(@RequestBody VacationRequestDTO VacationRequestDTO) {
 		return vacationRequestService.deleteVacationRequest(VacationRequestDTO);
 	}

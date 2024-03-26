@@ -32,17 +32,17 @@ public class ProductController {
         return productService.getProductById(productId);
     }
 
-    @PostMapping("/save-product")
+    @PostMapping("/product-save")
     public ProductDTO saveProduct(@RequestBody ProductDTO productDTO){
         return productService.saveProduct(productDTO);
     }
 
-    @PutMapping("/update-product")
+    @PutMapping("/product-update")
     public ProductDTO updateProduct(@RequestBody ProductDTO productDTO){
         return productService.updateProduct(productDTO);
     }
 
-    @DeleteMapping("/delete-product")
+    @DeleteMapping("/product-deletion")
     public boolean deleteProduct(@RequestBody ProductDTO productDTO){
         return productService.deleteProduct(productDTO);
     }

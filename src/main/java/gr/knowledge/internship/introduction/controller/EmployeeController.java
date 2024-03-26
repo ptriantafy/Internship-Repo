@@ -9,7 +9,7 @@ import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.service.EmployeeService;
 
 @RestController
-@RequestMapping(value = "/employees")
+@RequestMapping(value = "/employee")
 @CrossOrigin
 public class EmployeeController {
 
@@ -26,17 +26,17 @@ public class EmployeeController {
         return employeeService.getEmployeeById(employeeId);
     }
     
-    @PostMapping("/save-employee")
+    @PostMapping("/employee-save")
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO){
         return employeeService.saveEmployee(employeeDTO);
     }
 
-    @PutMapping("/update-employee")
+    @PutMapping("/employee-update")
     public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employeeDTO){
         return employeeService.updateEmployee(employeeDTO);
     }
 
-    @DeleteMapping("/delete-employee")
+    @DeleteMapping("/employee-deletion")
     public boolean deleteEmployee(@RequestBody EmployeeDTO employeeDTO){
         return employeeService.deleteEmployee(employeeDTO);
     }
