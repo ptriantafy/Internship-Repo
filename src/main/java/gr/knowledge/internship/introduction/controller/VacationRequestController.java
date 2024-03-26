@@ -25,7 +25,7 @@ public class VacationRequestController {
 	@Autowired
 	private VacationRequestService vacationRequestService;
 
-	@GetMapping("/")
+	@GetMapping
 	public List<VacationRequestDTO> getVacationRequests() {
 		return vacationRequestService.getAllVacationRequests();
 	}

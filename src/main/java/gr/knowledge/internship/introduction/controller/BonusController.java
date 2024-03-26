@@ -27,7 +27,7 @@ public class BonusController {
     @Autowired
     private BonusService bonusService;
 
-    @GetMapping("/")
+    @GetMapping
     public List<BonusDTO> getBonus(){
         return bonusService.getAllBonus();
     }

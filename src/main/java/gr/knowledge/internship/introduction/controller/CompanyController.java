@@ -17,7 +17,7 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @GetMapping("/")
+    @GetMapping
     public List<CompanyDTO> getCompany(){
         return companyService.getAllCompanies();
     }

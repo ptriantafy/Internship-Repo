@@ -26,7 +26,7 @@ public class EmployeeProductController {
     @Autowired
     private EmployeeProductService employeeProductService;
 
-    @GetMapping("/")
+    @GetMapping
     public List<EmployeeProductDTO> getEmployeeProduct(){
         return employeeProductService.getAllEmployeeProducts();
     }
