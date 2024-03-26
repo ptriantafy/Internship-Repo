@@ -1,4 +1,4 @@
-package gr.knowledge.internship.introduction.entity;
+package gr.knowledge.internship.introduction.enums;
 
 import java.math.BigDecimal;
 
@@ -24,10 +24,14 @@ public enum BonusBySeason {
 		return season;
 	}
 
-	public BonusBySeason resolveOfEnum(String input) {
+	public static BonusBySeason resolveOfEnum(String input) {
 		for (BonusBySeason value : BonusBySeason.values()) {
-			if (input.toUpperCase().equals(value.name()))
-				return value;
+			try {
+				if (input.toUpperCase().equals(value.name()))
+					return value;
+			} catch (NullPointerException npe) {
+				throw new SeasonNotFoundException(input);
+			}
 		}
 		throw new SeasonNotFoundException(input);
 	}

@@ -1,4 +1,4 @@
-package gr.knowledge.internship.introduction.entity;
+package gr.knowledge.internship.introduction.enums;
 
 public enum VacationStatus {
 	PENDING, APPROVED, REJECTED;
