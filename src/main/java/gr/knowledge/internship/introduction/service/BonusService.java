@@ -1,9 +1,8 @@
 package gr.knowledge.internship.introduction.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.BonusDTO;
-import gr.knowledge.internship.introduction.dto.CompanyDTO;
 import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.entity.Bonus;
-import gr.knowledge.internship.introduction.entity.BonusBySeason;
-import gr.knowledge.internship.introduction.exception.SeasonNotFoundException;
+import gr.knowledge.internship.introduction.enums.BonusBySeason;
 import gr.knowledge.internship.introduction.filtering.CalculateBonusFilter;
 import gr.knowledge.internship.introduction.filtering.CompanyBonusFilter;
 import gr.knowledge.internship.introduction.repository.BonusRepository;
@@ -37,17 +34,11 @@ public class BonusService {
 		bonusRepository.save(modelMapper.map(bonusDTO, Bonus.class));
 		return bonusDTO;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public BigDecimal calculateBonus(CalculateBonusFilter parameter) {
-		if (parameter.getSalary().compareTo(BigDecimal.ZERO) < 0) {
-			throw new IllegalArgumentException("Salary cannot be negative.");
-		}
-		try {
-			return BonusBySeason.valueOf(parameter.getSeason().toUpperCase()).getRate().multiply(parameter.getSalary());
-		} catch (IllegalArgumentException ex) {
-			throw new SeasonNotFoundException(parameter.getSeason());
-		}
+		parameter.validateInput();
+		return BonusBySeason.resolveOfEnum(parameter.getSeason()).getRate().multiply(parameter.getSalary());
 	}
 
 	@Transactional(readOnly = true)
@@ -75,19 +66,18 @@ public class BonusService {
 	}
 
 	public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyParameter) {
-		BonusBySeason seasonEnum;
-		try {
-			seasonEnum = BonusBySeason.valueOf(companyParameter.getSeason().toUpperCase());
-		} catch (IllegalArgumentException ex) {
-			throw new SeasonNotFoundException(companyParameter.getSeason());
-		}
+		companyParameter.validateInput();
 		List<EmployeeDTO> employeeList = employeeService.getCompanyEmployees(companyParameter.getCompanyId());
-//		stream employees and create bonus for each
-		List<BonusDTO> bonusList = employeeList.stream().map(e -> new BonusDTO(null, e,
-				modelMapper.map(e.getCompany(), CompanyDTO.class), seasonEnum.getRate().multiply(e.getSalary())))
-				.collect(Collectors.toList());
-		bonusRepository.saveAll(modelMapper.map(bonusList, new TypeToken<List<Bonus>>() {
-		}.getType()));
+//		iterate employees and create bonus for each
+		List<BonusDTO> bonusList = new ArrayList<BonusDTO>();
+		for (EmployeeDTO employee : employeeList) {
+			BigDecimal currRate = BonusBySeason.resolveOfEnum(companyParameter.getSeason()).getRate();
+			BonusDTO currBonus = new BonusDTO();
+			currBonus.setAmount(employee.getSalary().multiply(currRate));
+			currBonus.setCompany(employee.getCompany());
+			currBonus.setEmployee(employee);
+			bonusList.add(currBonus);
+		}
 
 		return bonusList;
 	}
