@@ -5,11 +5,11 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.entity.Employee;
 import gr.knowledge.internship.introduction.repository.EmployeeRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -26,12 +26,14 @@ public class EmployeeService {
 		return employeeDTO;
 	}
 
+	@Transactional(readOnly = true)
 	public List<EmployeeDTO> getAllEmployees() {
 		List<Employee> employeeList = employeeRepository.findAll();
 		return modelMapper.map(employeeList, new TypeToken<List<EmployeeDTO>>() {
 		}.getType());
 	}
 
+	@Transactional(readOnly = true)
 	public EmployeeDTO getEmployeeById(int employeeId) {
 		Employee employee = employeeRepository.getReferenceById(employeeId);
 		return modelMapper.map(employee, EmployeeDTO.class);
@@ -51,6 +53,7 @@ public class EmployeeService {
 		throw new IllegalArgumentException("Employee does not have enough Vacation Days");
 	}
 
+	@Transactional(readOnly = true)
 	public List<EmployeeDTO> getCompanyEmployees(int companyId) {
 		return modelMapper.map(employeeRepository.findByCompanyId(companyId), new TypeToken<List<EmployeeDTO>>() {
 		}.getType());

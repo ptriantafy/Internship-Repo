@@ -9,12 +9,12 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.EmployeeProductDTO;
 import gr.knowledge.internship.introduction.dto.ProductDTO;
 import gr.knowledge.internship.introduction.entity.EmployeeProduct;
 import gr.knowledge.internship.introduction.repository.EmployeeProductRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -31,12 +31,14 @@ public class EmployeeProductService {
 		return employeeProductDTO;
 	}
 
+	@Transactional(readOnly = true)
 	public List<EmployeeProductDTO> getAllEmployeeProducts() {
 		List<EmployeeProduct> employeeProducts = employeeProductRepository.findAll();
 		return modelMapper.map(employeeProducts, new TypeToken<List<EmployeeProductDTO>>() {
 		}.getType());
 	}
 
+	@Transactional(readOnly = true)
 	public EmployeeProductDTO getEmployeeProductById(int employeeProductId) {
 		EmployeeProduct employeeProduct = employeeProductRepository.getReferenceById(employeeProductId);
 		return modelMapper.map(employeeProduct, EmployeeProductDTO.class);
@@ -52,6 +54,7 @@ public class EmployeeProductService {
 		return true;
 	}
 
+	@Transactional(readOnly = true)
 	public Map<String, List<ProductDTO>> getCompanyProducts(int companyId) {
 		// get all company employee-products
 		Set<EmployeeProductDTO> employeeProductList = modelMapper.map(

@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.BonusDTO;
 import gr.knowledge.internship.introduction.dto.CompanyDTO;
@@ -18,7 +19,6 @@ import gr.knowledge.internship.introduction.exception.SeasonNotFoundException;
 import gr.knowledge.internship.introduction.filtering.CalculateBonusFilter;
 import gr.knowledge.internship.introduction.filtering.CompanyBonusFilter;
 import gr.knowledge.internship.introduction.repository.BonusRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -37,7 +37,8 @@ public class BonusService {
 		bonusRepository.save(modelMapper.map(bonusDTO, Bonus.class));
 		return bonusDTO;
 	}
-
+	
+	@Transactional(readOnly = true)
 	public BigDecimal calculateBonus(CalculateBonusFilter parameter) {
 		if (parameter.getSalary().compareTo(BigDecimal.ZERO) < 0) {
 			throw new IllegalArgumentException("Salary cannot be negative.");
@@ -49,17 +50,20 @@ public class BonusService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public List<BonusDTO> getAllBonus() {
 		List<Bonus> bonusList = bonusRepository.findAll();
 		return modelMapper.map(bonusList, new TypeToken<List<BonusDTO>>() {
 		}.getType());
 	}
 
+	@Transactional(readOnly = true)
 	public BonusDTO getBonusById(int bonusId) {
 		Bonus bonus = bonusRepository.getReferenceById(bonusId);
 		return modelMapper.map(bonus, BonusDTO.class);
 	}
 
+	@Transactional(readOnly = true)
 	public BonusDTO updateBonus(BonusDTO bonusDTO) {
 		bonusRepository.save(modelMapper.map(bonusDTO, Bonus.class));
 		return bonusDTO;

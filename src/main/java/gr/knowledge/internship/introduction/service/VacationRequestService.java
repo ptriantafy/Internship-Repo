@@ -10,13 +10,13 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.VacationRequestDTO;
 import gr.knowledge.internship.introduction.dto.VacationRequestHolidayDTO;
 import gr.knowledge.internship.introduction.entity.VacationRequest;
 import gr.knowledge.internship.introduction.entity.VacationStatus;
 import gr.knowledge.internship.introduction.repository.VacationRequestRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -56,12 +56,14 @@ public class VacationRequestService {
 		return false;
 	}
 
+	@Transactional(readOnly = true)
 	public List<VacationRequestDTO> getAllVacationRequests() {
 		List<VacationRequest> vacationRequests = vacationRequestRepository.findAll();
 		return modelMapper.map(vacationRequests, new TypeToken<List<VacationRequestDTO>>() {
 		}.getType());
 	}
 
+	@Transactional(readOnly = true)
 	public VacationRequestDTO getVacationRequestById(int vacationRequestId) {
 		VacationRequest vacationRequest = vacationRequestRepository.getReferenceById(vacationRequestId);
 		return modelMapper.map(vacationRequest, VacationRequestDTO.class);

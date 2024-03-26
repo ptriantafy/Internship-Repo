@@ -6,12 +6,12 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.CompanyDTO;
 import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.entity.Company;
 import gr.knowledge.internship.introduction.repository.CompanyRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -31,17 +31,20 @@ public class CompanyService {
 		return companyDTO;
 	}
 
+	@Transactional(readOnly = true)
 	public List<CompanyDTO> getAllCompanies() {
 		List<Company> companyList = companyRepository.findAll();
 		return modelMapper.map(companyList, new TypeToken<List<CompanyDTO>>() {
 		}.getType());
 	}
 
+	@Transactional(readOnly = true)
 	public CompanyDTO getCompanyById(int companyId) {
 		Company company = companyRepository.getReferenceById(companyId);
 		return modelMapper.map(company, CompanyDTO.class);
 	}
 
+	@Transactional(readOnly = true)
 	public BigDecimal getMonthlyExpenses(int companyId) {
 		List<EmployeeDTO> employeesDTO = modelMapper.map(employeeService.getCompanyEmployees(companyId),
 				new TypeToken<List<EmployeeDTO>>() {
