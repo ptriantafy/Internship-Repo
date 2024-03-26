@@ -63,6 +63,7 @@ public class EmployeeProductService {
 				new TypeToken<Set<EmployeeProductDTO>>() {
 				}.getType());
 
+//		TODO for loop
 		Map<String, List<ProductDTO>> outMap = employeeProductList.stream()
 				.collect(Collectors.groupingBy(
 						empProd -> empProd.getEmployee().getName().concat(empProd.getEmployee().getSurname()),

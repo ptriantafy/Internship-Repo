@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gr.knowledge.internship.introduction.dto.VacationRequestDTO;
 import gr.knowledge.internship.introduction.dto.VacationRequestHolidayDTO;
 import gr.knowledge.internship.introduction.entity.VacationRequest;
-import gr.knowledge.internship.introduction.entity.VacationStatus;
+import gr.knowledge.internship.introduction.enums.VacationStatus;
 import gr.knowledge.internship.introduction.repository.VacationRequestRepository;
 
 @Service

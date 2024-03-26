@@ -2,6 +2,7 @@ package gr.knowledge.internship.introduction.entity;
 
 import java.time.LocalDate;
 
+import gr.knowledge.internship.introduction.enums.VacationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

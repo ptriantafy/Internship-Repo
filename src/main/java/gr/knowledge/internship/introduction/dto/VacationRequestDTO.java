@@ -2,7 +2,7 @@ package gr.knowledge.internship.introduction.dto;
 
 import java.time.LocalDate;
 
-import gr.knowledge.internship.introduction.entity.VacationStatus;
+import gr.knowledge.internship.introduction.enums.VacationStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
