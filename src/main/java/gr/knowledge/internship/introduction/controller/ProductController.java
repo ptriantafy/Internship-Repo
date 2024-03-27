@@ -3,7 +3,6 @@ package gr.knowledge.internship.introduction.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,6 @@ import gr.knowledge.internship.introduction.dto.ProductDTO;
 import gr.knowledge.internship.introduction.service.ProductService;
 @RestController
 @RequestMapping(value = "/products")
-@CrossOrigin
 public class ProductController {
     @Autowired
     private ProductService productService;

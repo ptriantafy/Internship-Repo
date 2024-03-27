@@ -11,7 +11,6 @@ import gr.knowledge.internship.introduction.service.CompanyService;
 
 @RestController
 @RequestMapping(value = "/companies")
-@CrossOrigin
 public class CompanyController {
 
     @Autowired

@@ -9,8 +9,7 @@ import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.service.EmployeeService;
 
 @RestController
-@RequestMapping(value = "/employee")
-@CrossOrigin
+@RequestMapping(value = "/employees")
 public class EmployeeController {
 
     @Autowired

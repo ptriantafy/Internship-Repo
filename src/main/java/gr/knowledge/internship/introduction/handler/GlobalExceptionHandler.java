@@ -16,6 +16,8 @@ import gr.knowledge.internship.introduction.exception.SeasonNotFoundException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class GlobalExceptionHandler {
+	
+	
 	@ExceptionHandler(SeasonNotFoundException.class)
 	public ResponseEntity<Object> handleEntityNotFoundException(SeasonNotFoundException snf) {
 		Map<String, Object> body = new HashMap<>();
@@ -23,14 +25,14 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException iae) {
 		Map<String, Object> body = new HashMap<>();
 		body.put(iae.getMessage(), iae);
 		return new ResponseEntity<>(body, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
+
 	@ExceptionHandler(PropertyValueException.class)
 	public ResponseEntity<Object> handleProperyValueException(PropertyValueException pve) {
 		Map<String, Object> body = new HashMap<>();
