@@ -1,6 +1,7 @@
 package gr.knowledge.internship.introduction.service;
 
 import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,53 +16,86 @@ import gr.knowledge.internship.introduction.repository.EmployeeRepository;
 @Transactional
 public class EmployeeService {
 
-	@Autowired
-	private EmployeeRepository employeeRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-		employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
-		return employeeDTO;
-	}
+    /**
+     * Deletes an employee.
+     * @param employeeDTO the employee to be deleted
+     * @return true
+     */
+    public boolean deleteEmployee(EmployeeDTO employeeDTO) {
+        employeeRepository.delete(modelMapper.map(employeeDTO, Employee.class));
+        return true;
+    }
 
-	@Transactional(readOnly = true)
-	public List<EmployeeDTO> getAllEmployees() {
-		List<Employee> employeeList = employeeRepository.findAll();
-		return modelMapper.map(employeeList, new TypeToken<List<EmployeeDTO>>() {
-		}.getType());
-	}
+    /**
+     * Retrieves all employees.
+     * @return a list of all employees
+     */
+    @Transactional(readOnly = true)
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employeeList = employeeRepository.findAll();
+        return modelMapper.map(employeeList, new TypeToken<List<EmployeeDTO>>() {}.getType());
+    }
 
-	@Transactional(readOnly = true)
-	public EmployeeDTO getEmployeeById(Long employeeId) {
-		Employee employee = employeeRepository.getReferenceById(employeeId);
-		return modelMapper.map(employee, EmployeeDTO.class);
-	}
+    /**
+     * Retrieves employees of a company.
+     * @param companyId the ID of the company
+     * @return a list of employees belonging to the specified company
+     */
+    @Transactional(readOnly = true)
+    public List<EmployeeDTO> getCompanyEmployees(int companyId) {
+        return modelMapper.map(employeeRepository.findByCompanyId(companyId), new TypeToken<List<EmployeeDTO>>() {}.getType());
+    }
 
-	public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
-		employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
-		return employeeDTO;
-	}
+    /**
+     * Retrieves an employee by its ID.
+     * @param employeeId the ID of the employee to retrieve
+     * @return the employee with the specified ID
+     */
+    @Transactional(readOnly = true)
+    public EmployeeDTO getEmployeeById(Long employeeId) {
+        Employee employee = employeeRepository.getReferenceById(employeeId);
+        return modelMapper.map(employee, EmployeeDTO.class);
+    }
 
-	public EmployeeDTO removeVacationDays(Long employeeId, int days) throws IllegalArgumentException {
-		EmployeeDTO employeeDTO = this.getEmployeeById(employeeId);
-		if (employeeDTO.getVacationDays() >= days) {
-			employeeDTO.setVacationDays(employeeDTO.getVacationDays() - days);
-			return employeeDTO;
-		}
-		throw new IllegalArgumentException("Employee does not have enough Vacation Days");
-	}
+    /**
+     * Removes vacation days from an employee.
+     * @param employeeId the ID of the employee
+     * @param days the number of vacation days to remove
+     * @return the updated employee
+     * @throws IllegalArgumentException if the employee does not have enough vacation days
+     */
+    public EmployeeDTO removeVacationDays(Long employeeId, int days) throws IllegalArgumentException {
+        EmployeeDTO employeeDTO = getEmployeeById(employeeId);
+        if (employeeDTO.getVacationDays() >= days) {
+            employeeDTO.setVacationDays(employeeDTO.getVacationDays() - days);
+            return employeeDTO;
+        }
+        throw new IllegalArgumentException("Employee does not have enough Vacation Days");
+    }
 
-	@Transactional(readOnly = true)
-	public List<EmployeeDTO> getCompanyEmployees(int companyId) {
-		return modelMapper.map(employeeRepository.findByCompanyId(companyId), new TypeToken<List<EmployeeDTO>>() {
-		}.getType());
-	}
+    /**
+     * Saves an employee.
+     * @param employeeDTO the employee to be saved
+     * @return the saved employee
+     */
+    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
+        employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
+        return employeeDTO;
+    }
 
-	public boolean deleteEmployee(EmployeeDTO employeeDTO) {
-		employeeRepository.delete(modelMapper.map(employeeDTO, Employee.class));
-		return true;
-	}
-
+    /**
+     * Updates an employee.
+     * @param employeeDTO the employee to be updated
+     * @return the updated employee
+     */
+    public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
+        employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
+        return employeeDTO;
+    }
 }

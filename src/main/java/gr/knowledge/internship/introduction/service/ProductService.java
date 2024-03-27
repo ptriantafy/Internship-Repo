@@ -1,6 +1,7 @@
 package gr.knowledge.internship.introduction.service;
 
 import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,37 +16,60 @@ import gr.knowledge.internship.introduction.repository.ProductRepository;
 @Transactional
 public class ProductService {
 
-	@Autowired
-	private ProductRepository productRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	public ProductDTO saveProduct(ProductDTO productDTO) {
-		productRepository.save(modelMapper.map(productDTO, Product.class));
-		return productDTO;
-	}
+    /**
+     * Deletes a product.
+     * @param productDTO the product to be deleted
+     * @return true
+     */
+    public boolean deleteProduct(ProductDTO productDTO) {
+        productRepository.delete(modelMapper.map(productDTO, Product.class));
+        return true;
+    }
 
-	@Transactional(readOnly = true)
-	public List<ProductDTO> getAllProducts() {
-		List<Product> products = productRepository.findAll();
-		return modelMapper.map(products, new TypeToken<List<ProductDTO>>() {
-		}.getType());
-	}
+    /**
+     * Retrieves all products.
+     * @return a list of all products
+     */
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return modelMapper.map(products, new TypeToken<List<ProductDTO>>() {}.getType());
+    }
 
-	@Transactional(readOnly = true)
-	public ProductDTO getProductById(Long productId) {
-		Product product = productRepository.getReferenceById(productId);
-		return modelMapper.map(product, ProductDTO.class);
-	}
+    /**
+     * Retrieves a product by its ID.
+     * @param productId the ID of the product to retrieve
+     * @return the product with the specified ID
+     */
+    @Transactional(readOnly = true)
+    public ProductDTO getProductById(Long productId) {
+        Product product = productRepository.getReferenceById(productId);
+        return modelMapper.map(product, ProductDTO.class);
+    }
 
-	public ProductDTO updateProduct(ProductDTO productDTO) {
-		productRepository.save(modelMapper.map(productDTO, Product.class));
-		return productDTO;
-	}
+    /**
+     * Saves a product.
+     * @param productDTO the product to be saved
+     * @return the saved product
+     */
+    public ProductDTO saveProduct(ProductDTO productDTO) {
+        productRepository.save(modelMapper.map(productDTO, Product.class));
+        return productDTO;
+    }
 
-	public boolean deleteProduct(ProductDTO productDTO) {
-		productRepository.delete(modelMapper.map(productDTO, Product.class));
-		return true;
-	}
+    /**
+     * Updates a product.
+     * @param productDTO the product to be updated
+     * @return the updated product
+     */
+    public ProductDTO updateProduct(ProductDTO productDTO) {
+        productRepository.save(modelMapper.map(productDTO, Product.class));
+        return productDTO;
+    }
 }

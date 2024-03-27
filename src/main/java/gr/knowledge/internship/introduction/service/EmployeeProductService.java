@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,91 +21,122 @@ import gr.knowledge.internship.introduction.repository.EmployeeProductRepository
 @Transactional
 public class EmployeeProductService {
 
-	@Autowired
-	private EmployeeProductRepository employeeProductRepository;
+    @Autowired
+    private EmployeeProductRepository employeeProductRepository;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	public EmployeeProductDTO saveEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
-		employeeProductRepository.save(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
-		return employeeProductDTO;
-	}
+    /**
+     * Deletes an employee product.
+     * @param employeeProductDTO the employee product to be deleted
+     * @return true if the employee product was successfully deleted, false otherwise
+     */
+    public boolean deleteEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
+        employeeProductRepository.delete(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
+        return true;
+    }
 
-	@Transactional(readOnly = true)
-	public List<EmployeeProductDTO> getAllEmployeeProducts() {
-		List<EmployeeProduct> employeeProducts = employeeProductRepository.findAll();
-		return modelMapper.map(employeeProducts, new TypeToken<List<EmployeeProductDTO>>() {
-		}.getType());
-	}
-
-	@Transactional(readOnly = true)
-	public EmployeeProductDTO getEmployeeProductById(Long employeeProductId) {
-		EmployeeProduct employeeProduct = employeeProductRepository.getReferenceById(employeeProductId);
-		return modelMapper.map(employeeProduct, EmployeeProductDTO.class);
-	}
-
-	@Transactional(readOnly = true)
-	public List<EmployeeProductDTO> getEmployeProductsByEmployeeId(Long employeeId) {
-		List<EmployeeProduct> employeeProductDTOs = employeeProductRepository
-				.getEmployeeProductByEmployeeId(employeeId);
-		return modelMapper.map(employeeProductDTOs, new TypeToken<List<EmployeeProductDTO>>() {
-		}.getType());
-	}
-
-	public EmployeeProductDTO updateEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
-		employeeProductRepository.save(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
-		return employeeProductDTO;
-	}
-
-	public boolean deleteEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
-		employeeProductRepository.delete(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
-		return true;
-	}
-
-	@Transactional(readOnly = true)
-	public Map<String, List<ProductDTO>> getCompanyProducts(Long companyId) {
-		Map<String, List<ProductDTO>> outMap = new HashMap<String, List<ProductDTO>>();
-
-		List<EmployeeProductDTO> unformatedProductList = this.extractCompanyProducts(companyId);
-		Map<Long, String> employeeIdNameMap = this.extractEmployeeInfoMapFromList(unformatedProductList);
-
-		for (Map.Entry<Long, String> currEntry : employeeIdNameMap.entrySet()) {
-//			on duplicate key add a whitespace
-			if (outMap.containsKey(currEntry.getValue()))
-				currEntry.setValue(currEntry.getValue().concat(" "));
-			outMap.put(currEntry.getValue(), this.extractProductsOfEmployee(currEntry.getKey(), unformatedProductList));
-		}
-
-		return outMap;
-	}
-
-	private List<EmployeeProductDTO> extractCompanyProducts(Long companyId) {
-		List<EmployeeProductDTO> allEmployeeProductDTOs = this.getAllEmployeeProducts();
-		List<EmployeeProductDTO> extractedDTO = new ArrayList<EmployeeProductDTO>();
-		for (EmployeeProductDTO currDTO : allEmployeeProductDTOs) {
-			if (currDTO.getEmployee().getCompany().getId().equals(companyId))
+    private List<EmployeeProductDTO> extractCompanyProducts(Long companyId) {
+        List<EmployeeProductDTO> allEmployeeProductDTOs = getAllEmployeeProducts();
+        List<EmployeeProductDTO> extractedDTO = new ArrayList<>();
+        for (EmployeeProductDTO currDTO : allEmployeeProductDTOs) {
+            if (currDTO.getEmployee().getCompany().getId().equals(companyId)) {
 				extractedDTO.add(currDTO);
-		}
-		return extractedDTO;
-	}
+			}
+        }
+        return extractedDTO;
+    }
 
-	private List<ProductDTO> extractProductsOfEmployee(Long employeeId,
-			List<EmployeeProductDTO> unformatedProductList) {
-		List<ProductDTO> extractedProcuts = new ArrayList<ProductDTO>();
-		for (EmployeeProductDTO currEmployeeProductDTO : unformatedProductList) {
-			if (currEmployeeProductDTO.getEmployee().getId().equals(employeeId))
-				extractedProcuts.add(currEmployeeProductDTO.getProduct());
-		}
-		return extractedProcuts;
-	}
+    private Map<Long, String> extractEmployeeInfoMapFromList(List<EmployeeProductDTO> employeeProductsList) {
+        Map<Long, String> employeeIdNameMap = new HashMap<>();
+        for (EmployeeProductDTO employeeProduct : employeeProductsList) {
+            EmployeeDTO currEmployee = employeeProduct.getEmployee();
+            employeeIdNameMap.put(currEmployee.getId(), currEmployee.getName().concat(currEmployee.getSurname()));
+        }
+        return employeeIdNameMap;
+    }
 
-	private Map<Long, String> extractEmployeeInfoMapFromList(List<EmployeeProductDTO> employeeProductsList) {
-		Map<Long, String> employeeIdNameMap = new HashMap<Long, String>();
-		for (EmployeeProductDTO employeeProduct : employeeProductsList) {
-			EmployeeDTO currEmployee = employeeProduct.getEmployee();
-			employeeIdNameMap.put(currEmployee.getId(), currEmployee.getName().concat(currEmployee.getSurname()));
-		}
-		return employeeIdNameMap;
-	}
+    private List<ProductDTO> extractProductsOfEmployee(Long employeeId, List<EmployeeProductDTO> unformattedProductList) {
+        List<ProductDTO> extractedProducts = new ArrayList<>();
+        for (EmployeeProductDTO currEmployeeProductDTO : unformattedProductList) {
+            if (currEmployeeProductDTO.getEmployee().getId().equals(employeeId)) {
+				extractedProducts.add(currEmployeeProductDTO.getProduct());
+			}
+        }
+        return extractedProducts;
+    }
+
+    /**
+     * Retrieves all employee products.
+     * @return a list of all employee products
+     */
+    @Transactional(readOnly = true)
+    public List<EmployeeProductDTO> getAllEmployeeProducts() {
+        List<EmployeeProduct> employeeProducts = employeeProductRepository.findAll();
+        return modelMapper.map(employeeProducts, new TypeToken<List<EmployeeProductDTO>>() {}.getType());
+    }
+
+    /**
+     * Retrieves company products.
+     * @param companyId the ID of the company
+     * @return a map containing employee names as keys and lists of products as values
+     */
+    @Transactional(readOnly = true)
+    public Map<String, List<ProductDTO>> getCompanyProducts(Long companyId) {
+        Map<String, List<ProductDTO>> outMap = new HashMap<>();
+        List<EmployeeProductDTO> unformattedProductList = extractCompanyProducts(companyId);
+        Map<Long, String> employeeIdNameMap = extractEmployeeInfoMapFromList(unformattedProductList);
+
+        for (Map.Entry<Long, String> currEntry : employeeIdNameMap.entrySet()) {
+            if (outMap.containsKey(currEntry.getValue())) {
+				currEntry.setValue(currEntry.getValue().concat(" "));
+			}
+            outMap.put(currEntry.getValue(), extractProductsOfEmployee(currEntry.getKey(), unformattedProductList));
+        }
+
+        return outMap;
+    }
+
+    /**
+     * Retrieves an employee product by its ID.
+     * @param employeeProductId the ID of the employee product to retrieve
+     * @return the employee product with the specified ID
+     */
+    @Transactional(readOnly = true)
+    public EmployeeProductDTO getEmployeeProductById(Long employeeProductId) {
+        EmployeeProduct employeeProduct = employeeProductRepository.getReferenceById(employeeProductId);
+        return modelMapper.map(employeeProduct, EmployeeProductDTO.class);
+    }
+
+    /**
+     * Retrieves employee products by employee ID.
+     * @param employeeId the ID of the employee
+     * @return a list of employee products associated with the specified employee
+     */
+    @Transactional(readOnly = true)
+    public List<EmployeeProductDTO> getEmployeProductsByEmployeeId(Long employeeId) {
+        List<EmployeeProduct> employeeProductDTOs = employeeProductRepository.getEmployeeProductByEmployeeId(employeeId);
+        return modelMapper.map(employeeProductDTOs, new TypeToken<List<EmployeeProductDTO>>() {}.getType());
+    }
+
+    /**
+     * Saves an employee product.
+     * @param employeeProductDTO the employee product to be saved
+     * @return the saved employee product
+     */
+    public EmployeeProductDTO saveEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
+        employeeProductRepository.save(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
+        return employeeProductDTO;
+    }
+
+    /**
+     * Updates an employee product.
+     * @param employeeProductDTO the employee product to be updated
+     * @return the updated employee product
+     */
+    public EmployeeProductDTO updateEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
+        employeeProductRepository.save(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
+        return employeeProductDTO;
+    }
 }
