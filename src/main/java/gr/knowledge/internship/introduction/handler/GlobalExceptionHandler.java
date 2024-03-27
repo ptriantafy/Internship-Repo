@@ -40,4 +40,12 @@ public class GlobalExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<Object> handleNullPointerException(NullPointerException npe) {
+		Map<String, Object> body = new HashMap<>();
+		body.put(npe.getMessage(), npe.getCause());
+
+		return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

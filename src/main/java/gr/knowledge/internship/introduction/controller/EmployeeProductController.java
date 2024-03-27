@@ -25,8 +25,8 @@ public class EmployeeProductController {
     private EmployeeProductService employeeProductService;
 
     @DeleteMapping("/employee-product-deletion")
-    public boolean deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
-        return employeeProductService.deleteEmployeeProduct(employeeProductDTO);
+    public void deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
+        employeeProductService.deleteEmployeeProduct(employeeProductDTO);
     }
 
     @GetMapping("/company-products/{companyId}")

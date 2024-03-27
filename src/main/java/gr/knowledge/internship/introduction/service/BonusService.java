@@ -17,7 +17,9 @@ import gr.knowledge.internship.introduction.enums.BonusBySeason;
 import gr.knowledge.internship.introduction.filtering.CalculateBonusFilter;
 import gr.knowledge.internship.introduction.filtering.CompanyBonusFilter;
 import gr.knowledge.internship.introduction.repository.BonusRepository;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 @Transactional
 public class BonusService {
@@ -61,6 +63,8 @@ public class BonusService {
 			currBonus.setEmployee(employee);
 			bonusList.add(currBonus);
 		}
+		log.debug("Created new Company Bonus for company: " + companyParameter.getCompanyId() + " and season: "
+				+ companyParameter.getSeason());
 		return bonusList;
 	}
 
@@ -70,9 +74,9 @@ public class BonusService {
 	 * @param bonusDTO the bonus to be deleted
 	 * @return true
 	 */
-	public boolean deleteBonus(BonusDTO bonusDTO) {
+	public void deleteBonus(BonusDTO bonusDTO) {
 		bonusRepository.delete(modelMapper.map(bonusDTO, Bonus.class));
-		return true;
+		log.debug("Requested delete bonus with id: " + bonusDTO.getId());
 	}
 
 	/**
@@ -83,6 +87,7 @@ public class BonusService {
 	@Transactional(readOnly = true)
 	public List<BonusDTO> getAllBonus() {
 		List<Bonus> bonusList = bonusRepository.findAll();
+		log.debug("Get all bonus request returned " + bonusList.size() + " items");
 		return modelMapper.map(bonusList, new TypeToken<List<BonusDTO>>() {
 		}.getType());
 	}
@@ -96,6 +101,7 @@ public class BonusService {
 	@Transactional(readOnly = true)
 	public BonusDTO getBonusById(Long bonusId) {
 		Bonus bonus = bonusRepository.getReferenceById(bonusId);
+		log.debug("Get bonus with id: " + bonusId + " returned: " + bonus.toString());
 		return modelMapper.map(bonus, BonusDTO.class);
 	}
 
@@ -107,6 +113,7 @@ public class BonusService {
 	 */
 	public BonusDTO saveBonus(BonusDTO bonusDTO) {
 		bonusRepository.save(modelMapper.map(bonusDTO, Bonus.class));
+		log.debug("Saved bonus: " + bonusDTO.toString());
 		return bonusDTO;
 	}
 
@@ -119,6 +126,7 @@ public class BonusService {
 	@Transactional(readOnly = true)
 	public BonusDTO updateBonus(BonusDTO bonusDTO) {
 		bonusRepository.save(modelMapper.map(bonusDTO, Bonus.class));
+		log.debug("Updated bonus: " + bonusDTO.toString());
 		return bonusDTO;
 	}
 }

@@ -36,8 +36,8 @@ public class BonusController {
     }
 
     @DeleteMapping("/bonus-deletion")
-    public boolean deleteBonus(@RequestBody BonusDTO bonusDTO){
-        return bonusService.deleteBonus(bonusDTO);
+    public void deleteBonus(@RequestBody BonusDTO bonusDTO){
+        bonusService.deleteBonus(bonusDTO);
     }
 
     @GetMapping

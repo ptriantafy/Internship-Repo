@@ -24,8 +24,8 @@ public class VacationRequestController {
 	private VacationRequestService vacationRequestService;
 
 	@DeleteMapping("/vacation-request-deletion")
-	public boolean deleteVacationRequest(@RequestBody VacationRequestDTO VacationRequestDTO) {
-		return vacationRequestService.deleteVacationRequest(VacationRequestDTO);
+	public void deleteVacationRequest(@RequestBody VacationRequestDTO VacationRequestDTO) {
+		vacationRequestService.deleteVacationRequest(VacationRequestDTO);
 	}
 
 	@GetMapping("/{vacationRequestId}")

@@ -27,9 +27,8 @@ public class EmployeeService {
      * @param employeeDTO the employee to be deleted
      * @return true
      */
-    public boolean deleteEmployee(EmployeeDTO employeeDTO) {
+    public void deleteEmployee(EmployeeDTO employeeDTO) {
         employeeRepository.delete(modelMapper.map(employeeDTO, Employee.class));
-        return true;
     }
 
     /**

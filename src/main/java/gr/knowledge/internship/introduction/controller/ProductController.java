@@ -21,8 +21,8 @@ public class ProductController {
     private ProductService productService;
 
     @DeleteMapping("/product-deletion")
-    public boolean deleteProduct(@RequestBody ProductDTO productDTO){
-        return productService.deleteProduct(productDTO);
+    public void deleteProduct(@RequestBody ProductDTO productDTO){
+        productService.deleteProduct(productDTO);
     }
 
     @GetMapping

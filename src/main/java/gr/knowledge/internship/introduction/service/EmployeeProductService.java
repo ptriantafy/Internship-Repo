@@ -32,9 +32,8 @@ public class EmployeeProductService {
      * @param employeeProductDTO the employee product to be deleted
      * @return true if the employee product was successfully deleted, false otherwise
      */
-    public boolean deleteEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
+    public void deleteEmployeeProduct(EmployeeProductDTO employeeProductDTO) {
         employeeProductRepository.delete(modelMapper.map(employeeProductDTO, EmployeeProduct.class));
-        return true;
     }
 
     private List<EmployeeProductDTO> extractCompanyProducts(Long companyId) {

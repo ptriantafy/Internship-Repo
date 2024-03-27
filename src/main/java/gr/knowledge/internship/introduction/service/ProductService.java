@@ -27,9 +27,8 @@ public class ProductService {
      * @param productDTO the product to be deleted
      * @return true
      */
-    public boolean deleteProduct(ProductDTO productDTO) {
+    public void deleteProduct(ProductDTO productDTO) {
         productRepository.delete(modelMapper.map(productDTO, Product.class));
-        return true;
     }
 
     /**

@@ -23,8 +23,8 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @DeleteMapping("/employee-deletion")
-    public boolean deleteEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.deleteEmployee(employeeDTO);
+    public void deleteEmployee(@RequestBody EmployeeDTO employeeDTO){
+        employeeService.deleteEmployee(employeeDTO);
     }
 
     @GetMapping
