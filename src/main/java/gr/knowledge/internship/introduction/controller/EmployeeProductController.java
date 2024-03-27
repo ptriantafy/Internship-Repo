@@ -24,20 +24,25 @@ public class EmployeeProductController {
     @Autowired
     private EmployeeProductService employeeProductService;
 
-    @GetMapping
-    public List<EmployeeProductDTO> getEmployeeProduct(){
-        return employeeProductService.getAllEmployeeProducts();
+    @DeleteMapping("/employee-product-deletion")
+    public boolean deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
+        return employeeProductService.deleteEmployeeProduct(employeeProductDTO);
     }
 
     @GetMapping("/company-products/{companyId}")
     public Map<String, List<ProductDTO>> getCompanyProducts(@PathVariable Long companyId){
     	return employeeProductService.getCompanyProducts(companyId);
     }
-    
+
+    @GetMapping
+    public List<EmployeeProductDTO> getEmployeeProduct(){
+        return employeeProductService.getAllEmployeeProducts();
+    }
     @GetMapping("/{employeeProductId}")
     public EmployeeProductDTO getEmployeeProductById(@PathVariable Long employeeProductId) {
     	return employeeProductService.getEmployeeProductById(employeeProductId);
     }
+
     @PostMapping("/employee-product-save")
     public EmployeeProductDTO saveEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
         return employeeProductService.saveEmployeeProduct(employeeProductDTO);
@@ -48,10 +53,5 @@ public class EmployeeProductController {
         return employeeProductService.updateEmployeeProduct(employeeProductDTO);
     }
 
-    @DeleteMapping("/employee-product-deletion")
-    public boolean deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
-        return employeeProductService.deleteEmployeeProduct(employeeProductDTO);
-    }
-    
 
 }

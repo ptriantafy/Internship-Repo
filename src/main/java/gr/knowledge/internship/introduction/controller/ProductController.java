@@ -20,6 +20,11 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @DeleteMapping("/product-deletion")
+    public boolean deleteProduct(@RequestBody ProductDTO productDTO){
+        return productService.deleteProduct(productDTO);
+    }
+
     @GetMapping
     public List<ProductDTO> getProduct(){
         return productService.getAllProducts();
@@ -38,10 +43,5 @@ public class ProductController {
     @PutMapping("/product-update")
     public ProductDTO updateProduct(@RequestBody ProductDTO productDTO){
         return productService.updateProduct(productDTO);
-    }
-
-    @DeleteMapping("/product-deletion")
-    public boolean deleteProduct(@RequestBody ProductDTO productDTO){
-        return productService.deleteProduct(productDTO);
     }
 }

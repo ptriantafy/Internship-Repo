@@ -5,7 +5,7 @@ public enum VacationStatus {
 
 	/**
 	 * Retrieves the enum value from the given string.
-	 * 
+	 *
 	 * @param status the string representation of the enum value
 	 * @return the corresponding VacationStatus enum
 	 */

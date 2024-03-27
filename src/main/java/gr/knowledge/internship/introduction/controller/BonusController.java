@@ -25,25 +25,30 @@ public class BonusController {
     @Autowired
     private BonusService bonusService;
 
-    @GetMapping
-    public List<BonusDTO> getBonus(){
-        return bonusService.getAllBonus();
-    }
-    
     @GetMapping("/bonus-calculation")
     public BigDecimal calculateBonus(CalculateBonusFilter calculateBonusParameter) {
     	return bonusService.calculateBonus(calculateBonusParameter);
-    }
-    
-    @GetMapping("/{bonusId}")
-    public BonusDTO getBonusById(@PathVariable Long bonusId) {
-    	return bonusService.getBonusById(bonusId);
     }
 
     @PostMapping("/company-bonus")
     public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyBonusParameter){
     	return bonusService.createCompanyBonus(companyBonusParameter);
     }
+
+    @DeleteMapping("/bonus-deletion")
+    public boolean deleteBonus(@RequestBody BonusDTO bonusDTO){
+        return bonusService.deleteBonus(bonusDTO);
+    }
+
+    @GetMapping
+    public List<BonusDTO> getBonus(){
+        return bonusService.getAllBonus();
+    }
+    @GetMapping("/{bonusId}")
+    public BonusDTO getBonusById(@PathVariable Long bonusId) {
+    	return bonusService.getBonusById(bonusId);
+    }
+
     @PostMapping("/bonus-save")
     public BonusDTO saveBonus(@RequestBody BonusDTO bonusDTO){
         return bonusService.saveBonus(bonusDTO);
@@ -54,9 +59,4 @@ public class BonusController {
         return bonusService.updateBonus(bonusDTO);
     }
 
-    @DeleteMapping("/bonus-deletion")
-    public boolean deleteBonus(@RequestBody BonusDTO bonusDTO){
-        return bonusService.deleteBonus(bonusDTO);
-    }
-    
 }

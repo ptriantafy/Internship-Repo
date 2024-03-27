@@ -23,9 +23,9 @@ public class VacationRequestController {
 	@Autowired
 	private VacationRequestService vacationRequestService;
 
-	@GetMapping
-	public List<VacationRequestDTO> getVacationRequests() {
-		return vacationRequestService.getAllVacationRequests();
+	@DeleteMapping("/vacation-request-deletion")
+	public boolean deleteVacationRequest(@RequestBody VacationRequestDTO VacationRequestDTO) {
+		return vacationRequestService.deleteVacationRequest(VacationRequestDTO);
 	}
 
 	@GetMapping("/{vacationRequestId}")
@@ -33,9 +33,9 @@ public class VacationRequestController {
 		return vacationRequestService.getVacationRequestById(vacationRequestId);
 	}
 
-	@PutMapping("/vacation-request-update")
-	public VacationRequestDTO updateVacationRequest(@RequestBody VacationRequestDTO vacationRequestDTO) {
-		return vacationRequestService.updateVacationRequest(vacationRequestDTO);
+	@GetMapping
+	public List<VacationRequestDTO> getVacationRequests() {
+		return vacationRequestService.getAllVacationRequests();
 	}
 
 	@PostMapping("/vacation-request-save")
@@ -43,8 +43,8 @@ public class VacationRequestController {
 		return vacationRequestService.saveVacationRequest(vacationRequestHolidayDTO);
 	}
 
-	@DeleteMapping("/vacation-request-deletion")
-	public boolean deleteVacationRequest(@RequestBody VacationRequestDTO VacationRequestDTO) {
-		return vacationRequestService.deleteVacationRequest(VacationRequestDTO);
+	@PutMapping("/vacation-request-update")
+	public VacationRequestDTO updateVacationRequest(@RequestBody VacationRequestDTO vacationRequestDTO) {
+		return vacationRequestService.updateVacationRequest(vacationRequestDTO);
 	}
 }

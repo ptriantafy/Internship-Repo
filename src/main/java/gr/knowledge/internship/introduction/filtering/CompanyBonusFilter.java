@@ -19,7 +19,7 @@ public class CompanyBonusFilter {
 	private int companyId;
 	@Parameter(name="season")
 	private String season;
-	
+
 	public void validateInput() {
 		try {
 			if (this.getCompanyId()< 0) {

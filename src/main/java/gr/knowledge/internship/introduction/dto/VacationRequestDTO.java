@@ -22,11 +22,11 @@ public class VacationRequestDTO {
 	private VacationStatus status;
 	private int days;
 
-	public void setStatus(VacationStatus status) {
-		this.status = status;
-	}
-	
 	public void setStatus(String status) {
 		this.status = VacationStatus.valueOf(status.toUpperCase());
+	}
+
+	public void setStatus(VacationStatus status) {
+		this.status = status;
 	}
 }

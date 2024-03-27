@@ -15,11 +15,6 @@ public class IntroductionApplication {
 	}
 
 	@Bean
-	ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-
-	@Bean
 	WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
@@ -27,5 +22,10 @@ public class IntroductionApplication {
 				registry.addMapping("/**").allowedOrigins("http://localhost:8081").allowedMethods("*");
 			}
 		};
+	}
+
+	@Bean
+	ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 }
