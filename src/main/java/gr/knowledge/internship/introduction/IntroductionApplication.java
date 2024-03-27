@@ -14,13 +14,13 @@ public class IntroductionApplication {
 		SpringApplication.run(IntroductionApplication.class, args);
 	}
 
-    @Bean
-    ModelMapper modelMapper(){
+	@Bean
+	ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-    
-    @Bean
-    WebMvcConfigurer corsConfigurer() {
+
+	@Bean
+	WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {

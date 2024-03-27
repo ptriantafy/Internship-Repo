@@ -49,7 +49,7 @@ public class BonusService {
 	}
 
 	@Transactional(readOnly = true)
-	public BonusDTO getBonusById(int bonusId) {
+	public BonusDTO getBonusById(Long bonusId) {
 		Bonus bonus = bonusRepository.getReferenceById(bonusId);
 		return modelMapper.map(bonus, BonusDTO.class);
 	}

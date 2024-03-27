@@ -29,7 +29,7 @@ public class VacationRequestController {
 	}
 
 	@GetMapping("/{vacationRequestId}")
-	public VacationRequestDTO getVacationRequestById(@PathVariable int vacationRequestId) {
+	public VacationRequestDTO getVacationRequestById(@PathVariable Long vacationRequestId) {
 		return vacationRequestService.getVacationRequestById(vacationRequestId);
 	}
 

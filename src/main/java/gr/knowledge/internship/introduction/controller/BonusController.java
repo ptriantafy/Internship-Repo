@@ -36,7 +36,7 @@ public class BonusController {
     }
     
     @GetMapping("/{bonusId}")
-    public BonusDTO getBonusById(@PathVariable int bonusId) {
+    public BonusDTO getBonusById(@PathVariable Long bonusId) {
     	return bonusService.getBonusById(bonusId);
     }
 

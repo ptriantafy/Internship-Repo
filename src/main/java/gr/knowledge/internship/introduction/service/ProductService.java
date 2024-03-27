@@ -34,7 +34,7 @@ public class ProductService {
 	}
 
 	@Transactional(readOnly = true)
-	public ProductDTO getProductById(int productId) {
+	public ProductDTO getProductById(Long productId) {
 		Product product = productRepository.getReferenceById(productId);
 		return modelMapper.map(product, ProductDTO.class);
 	}

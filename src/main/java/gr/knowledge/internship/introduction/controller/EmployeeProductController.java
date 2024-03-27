@@ -35,7 +35,7 @@ public class EmployeeProductController {
     }
     
     @GetMapping("/{employeeProductId}")
-    public EmployeeProductDTO getEmployeeProductById(@PathVariable int employeeProductId) {
+    public EmployeeProductDTO getEmployeeProductById(@PathVariable Long employeeProductId) {
     	return employeeProductService.getEmployeeProductById(employeeProductId);
     }
     @PostMapping("/employee-product-save")

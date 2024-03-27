@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import gr.knowledge.internship.introduction.entity.Company;
 
-public interface CompanyRepository extends JpaRepository<Company, Integer> {
+public interface CompanyRepository extends JpaRepository<Company, Long> {
 
 }

@@ -64,7 +64,7 @@ public class VacationRequestService {
 	}
 
 	@Transactional(readOnly = true)
-	public VacationRequestDTO getVacationRequestById(int vacationRequestId) {
+	public VacationRequestDTO getVacationRequestById(Long vacationRequestId) {
 		VacationRequest vacationRequest = vacationRequestRepository.getReferenceById(vacationRequestId);
 		return modelMapper.map(vacationRequest, VacationRequestDTO.class);
 	}
@@ -81,7 +81,7 @@ public class VacationRequestService {
 
 	public VacationRequestDTO approveVacationRequest(VacationRequestDTO requestDTO) {
 		try {
-			this.employeeService.removeVacationDays((int) (long) requestDTO.getEmployee().getId(),
+			this.employeeService.removeVacationDays(requestDTO.getEmployee().getId(),
 					requestDTO.getDays());
 		} catch (IllegalArgumentException iae) {
 			requestDTO.setStatus(VacationStatus.REJECTED);

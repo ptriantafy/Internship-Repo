@@ -39,7 +39,7 @@ public class CompanyService {
 	}
 
 	@Transactional(readOnly = true)
-	public CompanyDTO getCompanyById(int companyId) {
+	public CompanyDTO getCompanyById(Long companyId) {
 		Company company = companyRepository.getReferenceById(companyId);
 		return modelMapper.map(company, CompanyDTO.class);
 	}

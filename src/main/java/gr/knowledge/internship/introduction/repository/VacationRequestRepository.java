@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import gr.knowledge.internship.introduction.entity.VacationRequest;
 
-public interface VacationRequestRepository extends JpaRepository<VacationRequest, Integer>{
+public interface VacationRequestRepository extends JpaRepository<VacationRequest, Long>{
 
 }

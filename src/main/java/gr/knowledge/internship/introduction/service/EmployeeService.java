@@ -34,7 +34,7 @@ public class EmployeeService {
 	}
 
 	@Transactional(readOnly = true)
-	public EmployeeDTO getEmployeeById(int employeeId) {
+	public EmployeeDTO getEmployeeById(Long employeeId) {
 		Employee employee = employeeRepository.getReferenceById(employeeId);
 		return modelMapper.map(employee, EmployeeDTO.class);
 	}
@@ -44,7 +44,7 @@ public class EmployeeService {
 		return employeeDTO;
 	}
 
-	public EmployeeDTO removeVacationDays(int employeeId, int days) throws IllegalArgumentException {
+	public EmployeeDTO removeVacationDays(Long employeeId, int days) throws IllegalArgumentException {
 		EmployeeDTO employeeDTO = this.getEmployeeById(employeeId);
 		if (employeeDTO.getVacationDays() >= days) {
 			employeeDTO.setVacationDays(employeeDTO.getVacationDays() - days);
