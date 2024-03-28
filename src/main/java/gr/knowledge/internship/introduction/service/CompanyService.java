@@ -13,7 +13,9 @@ import gr.knowledge.internship.introduction.dto.CompanyDTO;
 import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.entity.Company;
 import gr.knowledge.internship.introduction.repository.CompanyRepository;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 @Transactional
 public class CompanyService {
@@ -33,9 +35,9 @@ public class CompanyService {
 	 * @param companyDTO the company to be deleted
 	 * @return true
 	 */
-	public boolean deleteCompany(CompanyDTO companyDTO) {
+	public void deleteCompany(CompanyDTO companyDTO) {
+		log.debug("Requested delete of company: " + companyDTO.toString());
 		companyRepository.delete(modelMapper.map(companyDTO, Company.class));
-		return true;
 	}
 
 	/**
@@ -46,6 +48,7 @@ public class CompanyService {
 	@Transactional(readOnly = true)
 	public List<CompanyDTO> getAllCompanies() {
 		List<Company> companyList = companyRepository.findAll();
+		log.debug("Requested all companies. Returned %d items.", companyList.size());
 		return modelMapper.map(companyList, new TypeToken<List<CompanyDTO>>() {
 		}.getType());
 	}
@@ -58,6 +61,7 @@ public class CompanyService {
 	 */
 	@Transactional(readOnly = true)
 	public CompanyDTO getCompanyById(Long companyId) {
+		log.debug("Requested company with ID: %d.", companyId);
 		Company company = companyRepository.getReferenceById(companyId);
 		return modelMapper.map(company, CompanyDTO.class);
 	}
@@ -73,6 +77,7 @@ public class CompanyService {
 		List<EmployeeDTO> employeesDTO = modelMapper.map(employeeService.getCompanyEmployees(companyId),
 				new TypeToken<List<EmployeeDTO>>() {
 				}.getType());
+		log.debug("Requested expenses for company with ID: %d and %d employees.", companyId, employeesDTO.size());
 		return employeesDTO.stream().map(EmployeeDTO::getSalary).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
@@ -83,6 +88,7 @@ public class CompanyService {
 	 * @return the saved company
 	 */
 	public CompanyDTO saveCompany(CompanyDTO companyDTO) {
+		log.debug("Saved company: " + companyDTO.toString());
 		companyRepository.save(modelMapper.map(companyDTO, Company.class));
 		return companyDTO;
 	}
@@ -94,6 +100,7 @@ public class CompanyService {
 	 * @return the updated company
 	 */
 	public CompanyDTO updateCompany(CompanyDTO companyDTO) {
+		log.debug("Updated company: " + companyDTO.toString());
 		companyRepository.save(modelMapper.map(companyDTO, Company.class));
 		return companyDTO;
 	}

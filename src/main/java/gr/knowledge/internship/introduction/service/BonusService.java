@@ -42,6 +42,7 @@ public class BonusService {
 	@Transactional(readOnly = true)
 	public BigDecimal calculateBonus(CalculateBonusFilter parameter) {
 		parameter.validateInput();
+		log.debug("Bonus with parameters: "+parameter.toString() + " calculated");
 		return BonusBySeason.resolveOfEnum(parameter.getSeason()).getRate().multiply(parameter.getSalary());
 	}
 
@@ -56,15 +57,10 @@ public class BonusService {
 		List<EmployeeDTO> employeeList = employeeService.getCompanyEmployees(companyParameter.getCompanyId());
 		List<BonusDTO> bonusList = new ArrayList<>();
 		for (EmployeeDTO employee : employeeList) {
-			BigDecimal currRate = BonusBySeason.resolveOfEnum(companyParameter.getSeason()).getRate();
-			BonusDTO currBonus = new BonusDTO();
-			currBonus.setAmount(employee.getSalary().multiply(currRate));
-			currBonus.setCompany(employee.getCompany());
-			currBonus.setEmployee(employee);
-			bonusList.add(currBonus);
+			bonusList.add(this.companyBonusCreator(employee, companyParameter.getSeason()));
 		}
 		log.debug("Created new Company Bonus for company: " + companyParameter.getCompanyId() + " and season: "
-				+ companyParameter.getSeason());
+				+ companyParameter.getSeason()+". Entries: " + bonusList.size());
 		return bonusList;
 	}
 
@@ -128,5 +124,14 @@ public class BonusService {
 		bonusRepository.save(modelMapper.map(bonusDTO, Bonus.class));
 		log.debug("Updated bonus: " + bonusDTO.toString());
 		return bonusDTO;
+	}
+
+	private BonusDTO companyBonusCreator(EmployeeDTO employee, String season) {
+		BonusDTO newBonus = new BonusDTO();
+		BigDecimal rate = BonusBySeason.resolveOfEnum(season).getRate();
+		newBonus.setAmount(rate.multiply(employee.getSalary()));
+		newBonus.setEmployee(employee);
+		newBonus.setCompany(employee.getCompany());
+		return newBonus;
 	}
 }
