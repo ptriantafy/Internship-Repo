@@ -42,7 +42,8 @@ public class VacationRequestService {
 	 * @return true if the request should be automatically rejected, false otherwise
 	 */
 	public boolean automaticReject(VacationRequestHolidayDTO vacationRequestHolidayDTO) {
-		int days = this.getWorkDaysBetween(vacationRequestHolidayDTO.getStartDate(), vacationRequestHolidayDTO.getEndDate());
+		int days = this.getWorkDaysBetween(vacationRequestHolidayDTO.getStartDate(),
+				vacationRequestHolidayDTO.getEndDate());
 		vacationRequestHolidayDTO.setDays(days);
 		return vacationRequestHolidayDTO.getDays() > vacationRequestHolidayDTO.getEmployee().getVacationDays();
 	}
@@ -118,17 +119,21 @@ public class VacationRequestService {
 		responseMap.put(VacationStatus.APPROVED, this::approveVacationRequest);
 		responseMap.put(VacationStatus.PENDING, this::pendingVacationRequestDTO);
 		responseMap.put(VacationStatus.REJECTED, this::rejectVacationRequestDTO);
-		log.debug("Vacation Request with ID: &d requested to be updated as:" + vacationRequestDTO.toString(), vacationRequestDTO.getId());
+		log.debug("Vacation Request with ID: &d requested to be updated as:" + vacationRequestDTO.toString(),
+				vacationRequestDTO.getId());
 		return responseMap.get(vacationRequestDTO.getStatus()).apply(vacationRequestDTO);
 	}
 
 	private VacationRequestDTO approveVacationRequest(VacationRequestDTO requestDTO) {
 		try {
 			this.employeeService.removeVacationDays(requestDTO.getEmployee().getId(), requestDTO.getDays());
-			log.debug("Removed %d vacation days from Employee with ID: %d", requestDTO.getDays(), requestDTO.getEmployee().getId());
+			log.debug("Removed %d vacation days from Employee with ID: %d", requestDTO.getDays(),
+					requestDTO.getEmployee().getId());
 		} catch (IllegalArgumentException iae) {
 			requestDTO.setStatus(VacationStatus.REJECTED);
-			log.debug("Failed to remove %d vacation days from Employee with ID: %d with reason 'Not enough Vacation Days'", requestDTO.getDays(), requestDTO.getEmployee().getId());
+			log.debug(
+					"Failed to remove %d vacation days from Employee with ID: %d with reason 'Not enough Vacation Days'",
+					requestDTO.getDays(), requestDTO.getEmployee().getId());
 		}
 		return requestDTO;
 	}
@@ -146,8 +151,9 @@ public class VacationRequestService {
 		}
 		final long days = ChronoUnit.DAYS.between(start, end);
 		final long daysWithoutWeekends = days - 2 * ((days + startW.getValue()));
-		final int workDays = (int) (daysWithoutWeekends + (startW == DayOfWeek.SUNDAY ? 1 : 0) + (endW == DayOfWeek.SUNDAY ? 1 : 0));
-		if(workDays < 0) {
+		final int workDays = (int) (daysWithoutWeekends + (startW == DayOfWeek.SUNDAY ? 1 : 0)
+				+ (endW == DayOfWeek.SUNDAY ? 1 : 0));
+		if (workDays < 0) {
 			log.error("New vacation request with end_date before start_date");
 			throw new IllegalArgumentException("End date cannot be earlier than start date");
 		}

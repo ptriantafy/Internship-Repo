@@ -19,31 +19,31 @@ import gr.knowledge.internship.introduction.service.EmployeeService;
 @RequestMapping(value = "/employees")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+	@Autowired
+	private EmployeeService employeeService;
 
-    @DeleteMapping("/employee-deletion")
-    public void deleteEmployee(@RequestBody EmployeeDTO employeeDTO){
-        employeeService.deleteEmployee(employeeDTO);
-    }
+	@DeleteMapping("/employee-deletion")
+	public void deleteEmployee(@RequestBody EmployeeDTO employeeDTO) {
+		employeeService.deleteEmployee(employeeDTO);
+	}
 
-    @GetMapping
-    public List<EmployeeDTO> getEmployee(){
-        return employeeService.getAllEmployees();
-    }
+	@GetMapping
+	public List<EmployeeDTO> getEmployee() {
+		return employeeService.getAllEmployees();
+	}
 
-    @GetMapping("/{employeeId}")
-    public EmployeeDTO getEmployeeById(@PathVariable Long employeeId){
-        return employeeService.getEmployeeById(employeeId);
-    }
+	@GetMapping("/{employeeId}")
+	public EmployeeDTO getEmployeeById(@PathVariable Long employeeId) {
+		return employeeService.getEmployeeById(employeeId);
+	}
 
-    @PostMapping("/employee-save")
-    public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.saveEmployee(employeeDTO);
-    }
+	@PostMapping("/employee-save")
+	public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
+		return employeeService.saveEmployee(employeeDTO);
+	}
 
-    @PutMapping("/employee-update")
-    public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.updateEmployee(employeeDTO);
-    }
+	@PutMapping("/employee-update")
+	public EmployeeDTO updateEmployee(@RequestBody EmployeeDTO employeeDTO) {
+		return employeeService.updateEmployee(employeeDTO);
+	}
 }

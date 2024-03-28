@@ -19,7 +19,6 @@ import lombok.extern.log4j.Log4j2;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-
 	@ExceptionHandler(SeasonNotFoundException.class)
 	public ResponseEntity<Object> handleEntityNotFoundException(SeasonNotFoundException snf) {
 		Map<String, Object> body = new HashMap<>();

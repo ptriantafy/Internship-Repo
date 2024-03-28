@@ -14,34 +14,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gr.knowledge.internship.introduction.dto.ProductDTO;
 import gr.knowledge.internship.introduction.service.ProductService;
+
 @RestController
 @RequestMapping(value = "/products")
 public class ProductController {
-    @Autowired
-    private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-    @DeleteMapping("/product-deletion")
-    public void deleteProduct(@RequestBody ProductDTO productDTO){
-        productService.deleteProduct(productDTO);
-    }
+	@DeleteMapping("/product-deletion")
+	public void deleteProduct(@RequestBody ProductDTO productDTO) {
+		productService.deleteProduct(productDTO);
+	}
 
-    @GetMapping
-    public List<ProductDTO> getProduct(){
-        return productService.getAllProducts();
-    }
+	@GetMapping
+	public List<ProductDTO> getProduct() {
+		return productService.getAllProducts();
+	}
 
-    @GetMapping("/{productId}")
-    public ProductDTO getProductById(@PathVariable Long productId){
-        return productService.getProductById(productId);
-    }
+	@GetMapping("/{productId}")
+	public ProductDTO getProductById(@PathVariable Long productId) {
+		return productService.getProductById(productId);
+	}
 
-    @PostMapping("/product-save")
-    public ProductDTO saveProduct(@RequestBody ProductDTO productDTO){
-        return productService.saveProduct(productDTO);
-    }
+	@PostMapping("/product-save")
+	public ProductDTO saveProduct(@RequestBody ProductDTO productDTO) {
+		return productService.saveProduct(productDTO);
+	}
 
-    @PutMapping("/product-update")
-    public ProductDTO updateProduct(@RequestBody ProductDTO productDTO){
-        return productService.updateProduct(productDTO);
-    }
+	@PutMapping("/product-update")
+	public ProductDTO updateProduct(@RequestBody ProductDTO productDTO) {
+		return productService.updateProduct(productDTO);
+	}
 }

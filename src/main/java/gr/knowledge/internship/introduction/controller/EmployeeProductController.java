@@ -21,37 +21,37 @@ import gr.knowledge.internship.introduction.service.EmployeeProductService;
 @RequestMapping(value = "/employee-products")
 public class EmployeeProductController {
 
-    @Autowired
-    private EmployeeProductService employeeProductService;
+	@Autowired
+	private EmployeeProductService employeeProductService;
 
-    @DeleteMapping("/employee-product-deletion")
-    public void deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
-        employeeProductService.deleteEmployeeProduct(employeeProductDTO);
-    }
+	@DeleteMapping("/employee-product-deletion")
+	public void deleteEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO) {
+		employeeProductService.deleteEmployeeProduct(employeeProductDTO);
+	}
 
-    @GetMapping("/company-products/{companyId}")
-    public Map<String, List<ProductDTO>> getCompanyProducts(@PathVariable Long companyId){
-    	return employeeProductService.getCompanyProducts(companyId);
-    }
+	@GetMapping("/company-products/{companyId}")
+	public Map<String, List<ProductDTO>> getCompanyProducts(@PathVariable Long companyId) {
+		return employeeProductService.getCompanyProducts(companyId);
+	}
 
-    @GetMapping
-    public List<EmployeeProductDTO> getEmployeeProduct(){
-        return employeeProductService.getAllEmployeeProducts();
-    }
-    @GetMapping("/{employeeProductId}")
-    public EmployeeProductDTO getEmployeeProductById(@PathVariable Long employeeProductId) {
-    	return employeeProductService.getEmployeeProductById(employeeProductId);
-    }
+	@GetMapping
+	public List<EmployeeProductDTO> getEmployeeProduct() {
+		return employeeProductService.getAllEmployeeProducts();
+	}
 
-    @PostMapping("/employee-product-save")
-    public EmployeeProductDTO saveEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
-        return employeeProductService.saveEmployeeProduct(employeeProductDTO);
-    }
+	@GetMapping("/{employeeProductId}")
+	public EmployeeProductDTO getEmployeeProductById(@PathVariable Long employeeProductId) {
+		return employeeProductService.getEmployeeProductById(employeeProductId);
+	}
 
-    @PutMapping("/employee-product-update")
-    public EmployeeProductDTO updateEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO){
-        return employeeProductService.updateEmployeeProduct(employeeProductDTO);
-    }
+	@PostMapping("/employee-product-save")
+	public EmployeeProductDTO saveEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO) {
+		return employeeProductService.saveEmployeeProduct(employeeProductDTO);
+	}
 
+	@PutMapping("/employee-product-update")
+	public EmployeeProductDTO updateEmployeeProduct(@RequestBody EmployeeProductDTO employeeProductDTO) {
+		return employeeProductService.updateEmployeeProduct(employeeProductDTO);
+	}
 
 }

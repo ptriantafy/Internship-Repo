@@ -15,14 +15,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @ParameterObject
 public class CompanyBonusFilter {
-	@Parameter(name="companyId")
+	@Parameter(name = "companyId")
 	private int companyId;
-	@Parameter(name="season")
+	@Parameter(name = "season")
 	private String season;
 
 	public void validateInput() {
 		try {
-			if (this.getCompanyId()< 0) {
+			if (this.getCompanyId() < 0) {
 				throw new IllegalArgumentException("Company ID cannot be negative");
 			}
 		} catch (NullPointerException npe) {

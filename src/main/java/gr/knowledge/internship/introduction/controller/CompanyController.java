@@ -20,36 +20,36 @@ import gr.knowledge.internship.introduction.service.CompanyService;
 @RequestMapping(value = "/companies")
 public class CompanyController {
 
-    @Autowired
-    private CompanyService companyService;
+	@Autowired
+	private CompanyService companyService;
 
-    @DeleteMapping("/company-deletion")
-    public void deleteCompany(@RequestBody CompanyDTO companyDTO){
-        companyService.deleteCompany(companyDTO);
-    }
+	@DeleteMapping("/company-deletion")
+	public void deleteCompany(@RequestBody CompanyDTO companyDTO) {
+		companyService.deleteCompany(companyDTO);
+	}
 
-    @GetMapping
-    public List<CompanyDTO> getCompany(){
-        return companyService.getAllCompanies();
-    }
+	@GetMapping
+	public List<CompanyDTO> getCompany() {
+		return companyService.getAllCompanies();
+	}
 
-    @GetMapping("/{companyId}")
-    public CompanyDTO getCompanyById(@PathVariable Long companyId){
-        return companyService.getCompanyById(companyId);
-    }
+	@GetMapping("/{companyId}")
+	public CompanyDTO getCompanyById(@PathVariable Long companyId) {
+		return companyService.getCompanyById(companyId);
+	}
 
-    @GetMapping("/{companyId}/expenses")
-    public BigDecimal getMonthlyExpenses(@PathVariable int companyId) {
-    	return companyService.getMonthlyExpenses(companyId);
-    }
+	@GetMapping("/{companyId}/expenses")
+	public BigDecimal getMonthlyExpenses(@PathVariable int companyId) {
+		return companyService.getMonthlyExpenses(companyId);
+	}
 
-    @PostMapping("/company-save")
-    public CompanyDTO saveCompany(@RequestBody CompanyDTO companyDTO){
-        return companyService.saveCompany(companyDTO);
-    }
+	@PostMapping("/company-save")
+	public CompanyDTO saveCompany(@RequestBody CompanyDTO companyDTO) {
+		return companyService.saveCompany(companyDTO);
+	}
 
-    @PutMapping("/company-update")
-    public CompanyDTO updateCompany(@RequestBody CompanyDTO companyDTO){
-        return companyService.updateCompany(companyDTO);
-    }
+	@PutMapping("/company-update")
+	public CompanyDTO updateCompany(@RequestBody CompanyDTO companyDTO) {
+		return companyService.updateCompany(companyDTO);
+	}
 }

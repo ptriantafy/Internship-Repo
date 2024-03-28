@@ -19,44 +19,45 @@ import gr.knowledge.internship.introduction.filtering.CompanyBonusFilter;
 import gr.knowledge.internship.introduction.service.BonusService;
 
 @RestController
-@RequestMapping(value="/bonus")
+@RequestMapping(value = "/bonus")
 public class BonusController {
 
-    @Autowired
-    private BonusService bonusService;
+	@Autowired
+	private BonusService bonusService;
 
-    @GetMapping("/bonus-calculation")
-    public BigDecimal calculateBonus(CalculateBonusFilter calculateBonusParameter) {
-    	return bonusService.calculateBonus(calculateBonusParameter);
-    }
+	@GetMapping("/bonus-calculation")
+	public BigDecimal calculateBonus(CalculateBonusFilter calculateBonusParameter) {
+		return bonusService.calculateBonus(calculateBonusParameter);
+	}
 
-    @PostMapping("/company-bonus")
-    public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyBonusParameter){
-    	return bonusService.createCompanyBonus(companyBonusParameter);
-    }
+	@PostMapping("/company-bonus")
+	public List<BonusDTO> createCompanyBonus(CompanyBonusFilter companyBonusParameter) {
+		return bonusService.createCompanyBonus(companyBonusParameter);
+	}
 
-    @DeleteMapping("/bonus-deletion")
-    public void deleteBonus(@RequestBody BonusDTO bonusDTO){
-        bonusService.deleteBonus(bonusDTO);
-    }
+	@DeleteMapping("/bonus-deletion")
+	public void deleteBonus(@RequestBody BonusDTO bonusDTO) {
+		bonusService.deleteBonus(bonusDTO);
+	}
 
-    @GetMapping
-    public List<BonusDTO> getBonus(){
-        return bonusService.getAllBonus();
-    }
-    @GetMapping("/{bonusId}")
-    public BonusDTO getBonusById(@PathVariable Long bonusId) {
-    	return bonusService.getBonusById(bonusId);
-    }
+	@GetMapping
+	public List<BonusDTO> getBonus() {
+		return bonusService.getAllBonus();
+	}
 
-    @PostMapping("/bonus-save")
-    public BonusDTO saveBonus(@RequestBody BonusDTO bonusDTO){
-        return bonusService.saveBonus(bonusDTO);
-    }
+	@GetMapping("/{bonusId}")
+	public BonusDTO getBonusById(@PathVariable Long bonusId) {
+		return bonusService.getBonusById(bonusId);
+	}
 
-    @PutMapping("/bonus-update")
-    public BonusDTO updateBonus(@RequestBody BonusDTO bonusDTO){
-        return bonusService.updateBonus(bonusDTO);
-    }
+	@PostMapping("/bonus-save")
+	public BonusDTO saveBonus(@RequestBody BonusDTO bonusDTO) {
+		return bonusService.saveBonus(bonusDTO);
+	}
+
+	@PutMapping("/bonus-update")
+	public BonusDTO updateBonus(@RequestBody BonusDTO bonusDTO) {
+		return bonusService.updateBonus(bonusDTO);
+	}
 
 }

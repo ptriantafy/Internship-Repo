@@ -39,7 +39,8 @@ public class VacationRequestController {
 	}
 
 	@PostMapping("/vacation-request-save")
-	public VacationRequestHolidayDTO saveVacationRequest(@RequestBody VacationRequestHolidayDTO vacationRequestHolidayDTO) {
+	public VacationRequestHolidayDTO saveVacationRequest(
+			@RequestBody VacationRequestHolidayDTO vacationRequestHolidayDTO) {
 		return vacationRequestService.saveVacationRequest(vacationRequestHolidayDTO);
 	}
 

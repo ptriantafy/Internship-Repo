@@ -42,7 +42,7 @@ public class BonusService {
 	@Transactional(readOnly = true)
 	public BigDecimal calculateBonus(CalculateBonusFilter parameter) {
 		parameter.validateInput();
-		log.debug("Bonus with parameters: "+parameter.toString() + " calculated");
+		log.debug("Bonus with parameters: " + parameter.toString() + " calculated");
 		return BonusBySeason.resolveOfEnum(parameter.getSeason()).getRate().multiply(parameter.getSalary());
 	}
 
@@ -60,7 +60,7 @@ public class BonusService {
 			bonusList.add(this.companyBonusCreator(employee, companyParameter.getSeason()));
 		}
 		log.debug("Created new Company Bonus for company: " + companyParameter.getCompanyId() + " and season: "
-				+ companyParameter.getSeason()+". Entries: " + bonusList.size());
+				+ companyParameter.getSeason() + ". Entries: " + bonusList.size());
 		return bonusList;
 	}
 
