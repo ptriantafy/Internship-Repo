@@ -22,6 +22,11 @@ public class CalculateBonusFilter {
 	@Parameter(name = "season")
 	private String season;
 
+	@Override
+	public String toString() {
+		return "Season: " + this.getSeason() + " Salary: " + this.getSalary();
+	}
+
 	public void validateInput() {
 		try {
 			if (this.getSalary().compareTo(BigDecimal.ZERO) > 0) {
