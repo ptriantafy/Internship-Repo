@@ -23,20 +23,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "bonus")
 public class Bonus {
-	@Column(name = "id", nullable = false)
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_bonus")
-	@SequenceGenerator(name = "seq_bonus", sequenceName = "seq_bonus", allocationSize = 50)
-	private Long id;
-
-	@ManyToOne
-	@JoinColumn(name = "employee_id", nullable = false)
-	private Employee employee;
+	@Column(name = "amount", nullable = false)
+	private BigDecimal amount;
 
 	@ManyToOne
 	@JoinColumn(name = "company_id", nullable = false)
 	private Company company;
 
-	@Column(name = "amount", nullable = false)
-	private BigDecimal amount;
+	@ManyToOne
+	@JoinColumn(name = "employee_id", nullable = false)
+	private Employee employee;
+
+	@Column(name = "id", nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_bonus")
+	@SequenceGenerator(name = "seq_bonus", sequenceName = "seq_bonus", allocationSize = 50)
+	private Long id;
 }

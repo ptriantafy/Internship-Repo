@@ -14,13 +14,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class VacationRequestDTO {
-	private Long id;
+	private int days;
 	private EmployeeDTO employee;
-	private LocalDate startDate;
 	private LocalDate endDate;
+	private Long id;
+	private LocalDate startDate;
 	@Setter(value = AccessLevel.NONE)
 	private VacationStatus status;
-	private int days;
 
 	public void setStatus(String status) {
 		this.status = VacationStatus.valueOf(status.toUpperCase());

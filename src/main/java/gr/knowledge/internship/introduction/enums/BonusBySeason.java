@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import gr.knowledge.internship.introduction.exception.SeasonNotFoundException;
 
 public enum BonusBySeason {
-	WINTER("winter", new BigDecimal("1.3")), SPRING("spring", new BigDecimal("0.6")),
-	SUMMER("summer", new BigDecimal("0.7")), AUTUMN("autumn", new BigDecimal("0.4"));
+	AUTUMN("autumn", new BigDecimal("0.4")), SPRING("spring", new BigDecimal("0.6")),
+	SUMMER("summer", new BigDecimal("0.7")), WINTER("winter", new BigDecimal("1.3"));
 
 	/**
 	 * Resolves the BonusBySeason enum from a given string input.
@@ -27,6 +27,7 @@ public enum BonusBySeason {
 		}
 		throw new SeasonNotFoundException(input);
 	}
+
 	private final BigDecimal rate;
 
 	private final String season;

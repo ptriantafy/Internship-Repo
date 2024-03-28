@@ -24,27 +24,27 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VacationRequest {
+	@Column(name = "days", nullable = false)
+	private int days;
+
+	@ManyToOne
+	@JoinColumn(name = "employee_id", nullable = false)
+	private Employee employee;
+
+	@Column(name = "end_date", nullable = false)
+	private LocalDate endDate;
+
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vacation_request_seq")
 	@SequenceGenerator(name = "vacation_request_seq", sequenceName = "vacation_request_seq", allocationSize = 50)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "employee_id", nullable = false)
-	private Employee employee;
-
 	@Column(name = "start_date", nullable = false)
 	private LocalDate startDate;
-
-	@Column(name = "end_date", nullable = false)
-	private LocalDate endDate;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", length = 20, nullable = false)
 	private VacationStatus status;
-
-	@Column(name = "days", nullable = false)
-	private int days;
 
 }

@@ -24,6 +24,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "employee")
 public class Employee {
+	@ManyToOne
+	@JoinColumn(name = "company_id", nullable = false)
+	private Company company;
+
+	@Column(name = "email", length = 255, nullable = false)
+	private String email;
+
+	@Column(name = "employment_type", length = 20, nullable = false)
+	private String employmentType;
+
 	@Column(name = "id", nullable = false)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_employee")
@@ -33,27 +43,17 @@ public class Employee {
 	@Column(name = "name", length = 255, nullable = false)
 	private String name;
 
-	@Column(name = "surname", length = 255, nullable = false)
-	private String surname;
-
-	@Column(name = "email", length = 255, nullable = false)
-	private String email;
+	@Column(name = "salary", nullable = false)
+	private BigDecimal salary;
 
 	@Column(name = "start_date")
 	private LocalDate startDate;
 
+	@Column(name = "surname", length = 255, nullable = false)
+	private String surname;
+
 	@Column(name = "vacation_days")
 	private int vacationDays;
-
-	@Column(name = "salary", nullable = false)
-	private BigDecimal salary;
-
-	@Column(name = "employment_type", length = 20, nullable = false)
-	private String employmentType;
-
-	@ManyToOne
-	@JoinColumn(name = "company_id", nullable = false)
-	private Company company;
 
 //	@Override
 //	public boolean equals(Object obj) {

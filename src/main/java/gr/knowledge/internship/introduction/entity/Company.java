@@ -20,6 +20,9 @@ import lombok.Setter;
 @Table(name = "company")
 public class Company {
 
+	@Column(name = "address", length = 255, nullable = false)
+	private String address;
+
 	@Id
 	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_company")
@@ -28,9 +31,6 @@ public class Company {
 
 	@Column(name = "name", length = 255, nullable = false)
 	private String name;
-
-	@Column(name = "address", length = 255, nullable = false)
-	private String address;
 
 	@Column(name = "phone", length = 20, nullable = false)
 	private String phone;

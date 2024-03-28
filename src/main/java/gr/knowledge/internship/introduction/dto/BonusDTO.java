@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BonusDTO {
-	private Long id;
-	private EmployeeDTO employee;
-	private CompanyDTO company;
 	private BigDecimal amount;
+	private CompanyDTO company;
+	private EmployeeDTO employee;
+	private Long id;
 }

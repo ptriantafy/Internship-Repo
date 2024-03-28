@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeProductDTO {
-	private Long id;
 	private EmployeeDTO employee;
+	private Long id;
 	private ProductDTO product;
 }

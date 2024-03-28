@@ -19,15 +19,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeProduct {
+	@ManyToOne
+	@JoinColumn(name = "employee_id", nullable = false)
+	private Employee employee;
+
 	@Column(name = "id", nullable = false)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_product_seq")
 	@SequenceGenerator(name = "employee_product_seq", sequenceName = "employee_product_seq", allocationSize = 50)
 	private Long id;
-
-	@ManyToOne
-	@JoinColumn(name = "employee_id", nullable = false)
-	private Employee employee;
 
 	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)

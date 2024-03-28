@@ -13,13 +13,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmployeeDTO {
+	private CompanyDTO company;
+	private String email;
+	private String employmentType;
 	private Long id;
 	private String name;
-	private String surname;
-	private String email;
-	private LocalDate startDate;
-	private int vacationDays;
 	private BigDecimal salary;
-	private String employmentType;
-	private CompanyDTO company;
+	private LocalDate startDate;
+	private String surname;
+	private int vacationDays;
 }

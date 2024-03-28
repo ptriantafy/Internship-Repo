@@ -1,7 +1,7 @@
 package gr.knowledge.internship.introduction.enums;
 
 public enum VacationStatus {
-	PENDING, APPROVED, REJECTED;
+	APPROVED, PENDING, REJECTED;
 
 	/**
 	 * Retrieves the enum value from the given string.

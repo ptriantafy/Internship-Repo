@@ -17,6 +17,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
+	@Column(name = "barcode", length = 255, nullable = false)
+	private String barcode;
+
+	@Column(name = "description", length = 1000, nullable = false)
+	private String description;
+
 	@Column(name = "id", nullable = false)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
@@ -25,10 +31,4 @@ public class Product {
 
 	@Column(name = "name", length = 255, nullable = false)
 	private String name;
-
-	@Column(name = "description", length = 1000, nullable = false)
-	private String description;
-
-	@Column(name = "barcode", length = 255, nullable = false)
-	private String barcode;
 }
