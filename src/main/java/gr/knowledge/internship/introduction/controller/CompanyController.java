@@ -24,8 +24,8 @@ public class CompanyController {
     private CompanyService companyService;
 
     @DeleteMapping("/company-deletion")
-    public boolean deleteCompany(@RequestBody CompanyDTO companyDTO){
-        return companyService.deleteCompany(companyDTO);
+    public void deleteCompany(@RequestBody CompanyDTO companyDTO){
+        companyService.deleteCompany(companyDTO);
     }
 
     @GetMapping
