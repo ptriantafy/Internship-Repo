@@ -42,7 +42,7 @@ public class VacationRequestService {
 	 * @return true
 	 */
 	public void deleteVacationRequest(VacationRequestDTO vacationRequestDTO) {
-		log.debug("Vacation request with ID: %d deleted.", vacationRequestDTO.getId());
+		log.debug("Vacation request with ID: " + vacationRequestDTO.getId() + "deleted.");
 		vacationRequestRepository.delete(modelMapper.map(vacationRequestDTO, VacationRequest.class));
 	}
 
@@ -67,7 +67,7 @@ public class VacationRequestService {
 	 */
 	@Transactional(readOnly = true)
 	public VacationRequestDTO getVacationRequestById(Long vacationRequestId) {
-		log.debug("Requested fetch of Vacation Request with ID: %d", vacationRequestId);
+		log.debug("Requested fetch of Vacation Request with ID: " + vacationRequestId);
 		VacationRequest vacationRequest = vacationRequestRepository.getReferenceById(vacationRequestId);
 		return modelMapper.map(vacationRequest, VacationRequestDTO.class);
 	}
@@ -109,22 +109,22 @@ public class VacationRequestService {
 		responseMap.put(VacationStatus.PENDING, this::pendingVacationRequestDTO);
 		responseMap.put(VacationStatus.REJECTED, this::rejectVacationRequestDTO);
 		log.debug("Vacation Request with ID: " + vacationRequestDTO.getId() + "requested to be updated as:"
-				+ vacationRequestDTO.toString());
+				+ vacationRequestDTO.getStatus().toString());
 		return responseMap.get(vacationRequestDTO.getStatus()).apply(vacationRequestDTO);
 	}
 
 	private VacationRequestDTO approveVacationRequest(VacationRequestDTO requestDTO) {
-		VacationRequestDTO requestToAccept = modelMapper
-				.map(vacationRequestRepository.getReferenceById(requestDTO.getId()), VacationRequestDTO.class);
+		requestDTO = this.getVacationRequestById(requestDTO.getId());
+		requestDTO.setStatus(VacationStatus.APPROVED);
 		try {
-			this.employeeService.removeVacationDays(requestToAccept.getEmployee().getId(), requestToAccept.getDays());
-			log.debug("Removed %d vacation days from Employee with ID: " + requestToAccept.getDays(),
-					requestToAccept.getEmployee().getId());
+			this.employeeService.removeVacationDays(requestDTO.getEmployee().getId(), requestDTO.getDays());
+			log.debug("Removed" + requestDTO.getDays() + " vacation days from Employee with ID: "
+					+ requestDTO.getEmployee().getId());
 		} catch (IllegalArgumentException iae) {
 			requestDTO.setStatus(VacationStatus.REJECTED);
-			log.debug(
-					"Failed to remove %d vacation days from Employee with ID: %d with reason 'Not enough Vacation Days'",
-					requestToAccept.getDays(), requestToAccept.getEmployee().getId());
+			vacationRequestRepository.save(modelMapper.map(requestDTO, VacationRequest.class));
+			log.debug("Failed to remove " + requestDTO.getDays() + " vacation days from Employee with ID:"
+					+ requestDTO.getEmployee().getId() + "with reason 'Not enough Vacation Days'");
 		}
 		return requestDTO;
 	}
@@ -168,10 +168,16 @@ public class VacationRequestService {
 	}
 
 	private VacationRequestDTO pendingVacationRequestDTO(VacationRequestDTO requestDTO) {
+		requestDTO = this.getVacationRequestById(requestDTO.getId());
+		requestDTO.setStatus(VacationStatus.PENDING);
+		vacationRequestRepository.save(modelMapper.map(requestDTO, VacationRequest.class));
 		return requestDTO;
 	}
 
 	private VacationRequestDTO rejectVacationRequestDTO(VacationRequestDTO requestDTO) {
+		requestDTO = this.getVacationRequestById(requestDTO.getId());
+		requestDTO.setStatus(VacationStatus.REJECTED);
+		vacationRequestRepository.save(modelMapper.map(requestDTO, VacationRequest.class));
 		return requestDTO;
 	}
 }
