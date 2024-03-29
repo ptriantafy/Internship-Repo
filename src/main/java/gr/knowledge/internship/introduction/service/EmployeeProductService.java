@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import gr.knowledge.internship.introduction.dto.EmployeeDTO;
 import gr.knowledge.internship.introduction.dto.EmployeeProductDTO;
+import gr.knowledge.internship.introduction.dto.EmployeeProductMapKeyDTO;
 import gr.knowledge.internship.introduction.dto.ProductDTO;
 import gr.knowledge.internship.introduction.entity.EmployeeProduct;
 import gr.knowledge.internship.introduction.repository.EmployeeProductRepository;
@@ -26,6 +27,9 @@ public class EmployeeProductService {
 	@Autowired
 	private EmployeeProductRepository employeeProductRepository;
 
+	@Autowired
+	private EmployeeService employeeService;
+	
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -62,16 +66,15 @@ public class EmployeeProductService {
 	 *         values
 	 */
 	@Transactional(readOnly = true)
-	public Map<String, List<ProductDTO>> getCompanyProducts(Long companyId) {
-		Map<String, List<ProductDTO>> outMap = new HashMap<>();
+	public Map<EmployeeProductMapKeyDTO, List<ProductDTO>> getCompanyProducts(Long companyId) {
+		Map<EmployeeProductMapKeyDTO, List<ProductDTO>> outMap = new HashMap<>();
 		List<EmployeeProductDTO> unformattedProductList = extractCompanyProducts(companyId);
-		Map<Long, String> employeeIdNameMap = extractEmployeeInfoMapFromList(unformattedProductList);
+		List<EmployeeDTO> companyEmployeesList = employeeService.getEmployeesOfCompany(companyId);
 
-		for (Map.Entry<Long, String> currEntry : employeeIdNameMap.entrySet()) {
-			if (outMap.containsKey(currEntry.getValue())) {
-				currEntry.setValue(currEntry.getValue().concat(" "));
-			}
-			outMap.put(currEntry.getValue(), extractProductsOfEmployee(currEntry.getKey(), unformattedProductList));
+		for (EmployeeDTO currEmployee : companyEmployeesList) {
+			EmployeeProductMapKeyDTO mapKey = new EmployeeProductMapKeyDTO();
+			mapKey.fromEmployee(currEmployee);
+			outMap.put(mapKey, extractProductsOfEmployee(currEmployee.getId(), unformattedProductList));
 		}
 		log.debug("Returned all company products of company with id: %d. Entries: &d", companyId, outMap.size());
 		return outMap;
@@ -121,15 +124,6 @@ public class EmployeeProductService {
 			}
 		}
 		return extractedDTO;
-	}
-
-	private Map<Long, String> extractEmployeeInfoMapFromList(List<EmployeeProductDTO> employeeProductsList) {
-		Map<Long, String> employeeIdNameMap = new HashMap<>();
-		for (EmployeeProductDTO employeeProduct : employeeProductsList) {
-			EmployeeDTO currEmployee = employeeProduct.getEmployee();
-			employeeIdNameMap.put(currEmployee.getId(), currEmployee.getName().concat(currEmployee.getSurname()));
-		}
-		return employeeIdNameMap;
 	}
 
 	private List<ProductDTO> extractProductsOfEmployee(Long employeeId,

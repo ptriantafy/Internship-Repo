@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.knowledge.internship.introduction.dto.EmployeeProductDTO;
+import gr.knowledge.internship.introduction.dto.EmployeeProductMapKeyDTO;
 import gr.knowledge.internship.introduction.dto.ProductDTO;
 import gr.knowledge.internship.introduction.service.EmployeeProductService;
 
@@ -30,7 +31,7 @@ public class EmployeeProductController {
 	}
 
 	@GetMapping("/company-products/{companyId}")
-	public Map<String, List<ProductDTO>> getCompanyProducts(@PathVariable Long companyId) {
+	public Map<EmployeeProductMapKeyDTO, List<ProductDTO>> getCompanyProducts(@PathVariable Long companyId) {
 		return employeeProductService.getCompanyProducts(companyId);
 	}
 
