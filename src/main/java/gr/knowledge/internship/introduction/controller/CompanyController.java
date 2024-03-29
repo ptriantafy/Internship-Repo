@@ -39,7 +39,7 @@ public class CompanyController {
 	}
 
 	@GetMapping("/{companyId}/expenses")
-	public BigDecimal getMonthlyExpenses(@PathVariable int companyId) {
+	public BigDecimal getMonthlyExpenses(@PathVariable Long companyId) {
 		return companyService.getMonthlyExpenses(companyId);
 	}
 

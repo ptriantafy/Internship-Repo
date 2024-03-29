@@ -16,7 +16,7 @@ import lombok.Setter;
 @ParameterObject
 public class CompanyBonusFilter {
 	@Parameter(name = "companyId")
-	private int companyId;
+	private Long companyId;
 	@Parameter(name = "season")
 	private String season;
 
