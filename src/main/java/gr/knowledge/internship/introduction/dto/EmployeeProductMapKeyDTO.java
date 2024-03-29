@@ -1,6 +1,5 @@
 package gr.knowledge.internship.introduction.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,6 @@ import lombok.Setter;
 @Setter
 public class EmployeeProductMapKeyDTO {
 	private String fullName;
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private Long id;
 
 	@Override
