@@ -115,4 +115,9 @@ public class EmployeeService {
 		employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
 		return employeeDTO;
 	}
+
+	public List<EmployeeDTO> getEmployeesOfCompany(Long companyId) {
+		List<Employee> companyEmployees = employeeRepository.getEmployeeByCompanyId(companyId);
+		return modelMapper.map(companyEmployees, new TypeToken<List<EmployeeDTO>>() {}.getType());
+	}
 }
