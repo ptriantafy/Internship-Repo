@@ -29,8 +29,8 @@ public class CalculateBonusFilter {
 
 	public void validateInput() {
 		try {
-			if (this.getSalary().compareTo(BigDecimal.ZERO) > 0) {
-				throw new IllegalArgumentException("Salary cannot be negative");
+			if (this.getSalary().compareTo(BigDecimal.ZERO) < 0) {
+				throw new IllegalArgumentException("Salary cannot be negative: " + salary);
 			}
 		} catch (NullPointerException npe) {
 			throw new IllegalArgumentException("Salary cannot be null");
