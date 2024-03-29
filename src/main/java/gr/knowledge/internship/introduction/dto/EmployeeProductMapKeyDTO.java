@@ -13,16 +13,6 @@ public class EmployeeProductMapKeyDTO {
 	private String fullName;
 	private Long id;
 
-	@Override
-	public boolean equals(Object o) {
-		if ((o == null) || !(o instanceof EmployeeProductMapKeyDTO)) {
-			return false;
-		}
-
-		final EmployeeProductMapKeyDTO obj = (EmployeeProductMapKeyDTO) o;
-		return obj.getId() == this.id;
-	}
-
 	public void fromEmployee(EmployeeDTO employee) {
 		this.setId(employee.getId());
 		this.setFullName(employee.getName().concat(employee.getSurname()));
