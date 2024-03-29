@@ -36,19 +36,6 @@ public class VacationRequestService {
 	EmployeeService employeeService;
 
 	/**
-	 * Checks if a vacation request should be automatically rejected.
-	 *
-	 * @param vacationRequestHolidayDTO the vacation request
-	 * @return true if the request should be automatically rejected, false otherwise
-	 */
-	public boolean automaticReject(VacationRequestHolidayDTO vacationRequestHolidayDTO) {
-		int days = this.getWorkDaysBetween(vacationRequestHolidayDTO.getStartDate(),
-				vacationRequestHolidayDTO.getEndDate());
-		vacationRequestHolidayDTO.setDays(days);
-		return vacationRequestHolidayDTO.getDays() > vacationRequestHolidayDTO.getEmployee().getVacationDays();
-	}
-
-	/**
 	 * Deletes a vacation request.
 	 *
 	 * @param vacationRequestDTO the vacation request to be deleted
@@ -98,13 +85,15 @@ public class VacationRequestService {
 		}
 		if (automaticReject(vacationRequestHolidayDTO)) {
 			vacationRequestHolidayDTO.setStatus(VacationStatus.REJECTED);
+			VacationRequestDTO requestToSave = modelMapper.map(vacationRequestHolidayDTO, VacationRequestDTO.class);
 			log.debug("New vacation request automatically rejected");
-			vacationRequestRepository.save(modelMapper.map(vacationRequestHolidayDTO, VacationRequest.class));
+			vacationRequestRepository.save(modelMapper.map(requestToSave, VacationRequest.class));
 			return vacationRequestHolidayDTO;
 		}
 		vacationRequestHolidayDTO.setStatus(VacationStatus.PENDING);
+		VacationRequestDTO requestToSave = modelMapper.map(vacationRequestHolidayDTO, VacationRequestDTO.class);
 		log.debug("New vacation request set to pending");
-		vacationRequestRepository.save(modelMapper.map(vacationRequestHolidayDTO, VacationRequest.class));
+		vacationRequestRepository.save(modelMapper.map(requestToSave, VacationRequest.class));
 		return vacationRequestHolidayDTO;
 	}
 
@@ -119,45 +108,63 @@ public class VacationRequestService {
 		responseMap.put(VacationStatus.APPROVED, this::approveVacationRequest);
 		responseMap.put(VacationStatus.PENDING, this::pendingVacationRequestDTO);
 		responseMap.put(VacationStatus.REJECTED, this::rejectVacationRequestDTO);
-		log.debug("Vacation Request with ID: &d requested to be updated as:" + vacationRequestDTO.toString(),
-				vacationRequestDTO.getId());
+		log.debug("Vacation Request with ID: " + vacationRequestDTO.getId() + "requested to be updated as:"
+				+ vacationRequestDTO.toString());
 		return responseMap.get(vacationRequestDTO.getStatus()).apply(vacationRequestDTO);
 	}
 
 	private VacationRequestDTO approveVacationRequest(VacationRequestDTO requestDTO) {
+		VacationRequestDTO requestToAccept = modelMapper
+				.map(vacationRequestRepository.getReferenceById(requestDTO.getId()), VacationRequestDTO.class);
 		try {
-			this.employeeService.removeVacationDays(requestDTO.getEmployee().getId(), requestDTO.getDays());
-			log.debug("Removed %d vacation days from Employee with ID: %d", requestDTO.getDays(),
-					requestDTO.getEmployee().getId());
+			this.employeeService.removeVacationDays(requestToAccept.getEmployee().getId(), requestToAccept.getDays());
+			log.debug("Removed %d vacation days from Employee with ID: " + requestToAccept.getDays(),
+					requestToAccept.getEmployee().getId());
 		} catch (IllegalArgumentException iae) {
 			requestDTO.setStatus(VacationStatus.REJECTED);
 			log.debug(
 					"Failed to remove %d vacation days from Employee with ID: %d with reason 'Not enough Vacation Days'",
-					requestDTO.getDays(), requestDTO.getEmployee().getId());
+					requestToAccept.getDays(), requestToAccept.getEmployee().getId());
 		}
 		return requestDTO;
 	}
 
-	private int getWorkDaysBetween(LocalDate start, LocalDate end) {
+	/**
+	 * Checks if a vacation request should be automatically rejected.
+	 *
+	 * @param vacationRequestHolidayDTO the vacation request
+	 * @return true if the request should be automatically rejected, false otherwise
+	 */
+	private boolean automaticReject(VacationRequestHolidayDTO vacationRequestHolidayDTO) {
+		int days = this.getWorkDaysBetween(vacationRequestHolidayDTO.getStartDate(),
+				vacationRequestHolidayDTO.getEndDate());
+		vacationRequestHolidayDTO.setDays(days - vacationRequestHolidayDTO.getHolidays());
+		int employeeDays = employeeService.getEmployeeById(vacationRequestHolidayDTO.getEmployee().getId())
+				.getVacationDays();
+		log.debug("Request Days: " + vacationRequestHolidayDTO.getDays());
+		log.debug("Employee Days: " + employeeDays);
+		return vacationRequestHolidayDTO.getDays() > employeeDays;
+	}
 
-		DayOfWeek startW;
-		DayOfWeek endW;
-		try {
-			startW = start.getDayOfWeek();
-			endW = end.getDayOfWeek();
-		} catch (NullPointerException npe) {
-			log.error("Null date for vacation request given.");
-			throw new IllegalArgumentException("You specified a null start or end date.");
-		}
-		final long days = ChronoUnit.DAYS.between(start, end);
-		final long daysWithoutWeekends = days - 2 * ((days + startW.getValue()));
-		final int workDays = (int) (daysWithoutWeekends + (startW == DayOfWeek.SUNDAY ? 1 : 0)
-				+ (endW == DayOfWeek.SUNDAY ? 1 : 0));
-		if (workDays < 0) {
+	private int getWorkDaysBetween(LocalDate start, LocalDate end) {
+		if (start.isAfter(end)) {
 			log.error("New vacation request with end_date before start_date");
 			throw new IllegalArgumentException("End date cannot be earlier than start date");
 		}
-		return workDays;
+		int workdays = 0;
+		while (start.isBefore(end) || start.isEqual(end)) {
+			if (start.getDayOfWeek().equals(DayOfWeek.SATURDAY) || start.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+				log.debug(start + "weekend");
+				start = start.plus(1, ChronoUnit.DAYS);
+				continue;
+			}
+			log.debug(start + "day");
+			start = start.plus(1, ChronoUnit.DAYS);
+			workdays = workdays + 1;
+		}
+		log.debug("Calculated workdays to be: " + workdays);
+		log.debug("From: " + start.toString() + " To: " + end.toString());
+		return workdays;
 	}
 
 	private VacationRequestDTO pendingVacationRequestDTO(VacationRequestDTO requestDTO) {

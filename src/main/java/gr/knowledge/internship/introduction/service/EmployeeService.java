@@ -74,6 +74,12 @@ public class EmployeeService {
 		return modelMapper.map(employee, EmployeeDTO.class);
 	}
 
+	public List<EmployeeDTO> getEmployeesOfCompany(Long companyId) {
+		List<Employee> companyEmployees = employeeRepository.getEmployeeByCompanyId(companyId);
+		return modelMapper.map(companyEmployees, new TypeToken<List<EmployeeDTO>>() {
+		}.getType());
+	}
+
 	/**
 	 * Removes vacation days from an employee.
 	 *
@@ -87,6 +93,7 @@ public class EmployeeService {
 		EmployeeDTO employeeDTO = getEmployeeById(employeeId);
 		if (employeeDTO.getVacationDays() >= days) {
 			employeeDTO.setVacationDays(employeeDTO.getVacationDays() - days);
+			employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
 			return employeeDTO;
 		}
 		throw new IllegalArgumentException("Employee does not have enough Vacation Days");
@@ -114,10 +121,5 @@ public class EmployeeService {
 		log.debug("Updated Employee: " + employeeDTO.toString());
 		employeeRepository.save(modelMapper.map(employeeDTO, Employee.class));
 		return employeeDTO;
-	}
-
-	public List<EmployeeDTO> getEmployeesOfCompany(Long companyId) {
-		List<Employee> companyEmployees = employeeRepository.getEmployeeByCompanyId(companyId);
-		return modelMapper.map(companyEmployees, new TypeToken<List<EmployeeDTO>>() {}.getType());
 	}
 }
