@@ -31,7 +31,7 @@ public class ProductService {
 	 * @return true
 	 */
 	public void deleteProduct(ProductDTO productDTO) {
-		log.debug("Tried deleting product with id: %d", productDTO.getId());
+		log.debug("Tried deleting product with id: " + productDTO.getId());
 		productRepository.delete(modelMapper.map(productDTO, Product.class));
 	}
 
@@ -43,7 +43,7 @@ public class ProductService {
 	@Transactional(readOnly = true)
 	public List<ProductDTO> getAllProducts() {
 		List<Product> products = productRepository.findAll();
-		log.debug("Requested all products. Returned %d items.", products.size());
+		log.debug("Requested all products. Returned" + products.size() + " items.");
 		return modelMapper.map(products, new TypeToken<List<ProductDTO>>() {
 		}.getType());
 	}
@@ -57,7 +57,7 @@ public class ProductService {
 	@Transactional(readOnly = true)
 	public ProductDTO getProductById(Long productId) {
 		Product product = productRepository.getReferenceById(productId);
-		log.debug("Requested to get product with id: %d", productId);
+		log.debug("Requested to get product with id: " + productId);
 		return modelMapper.map(product, ProductDTO.class);
 	}
 

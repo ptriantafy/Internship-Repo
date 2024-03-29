@@ -48,7 +48,7 @@ public class CompanyService {
 	@Transactional(readOnly = true)
 	public List<CompanyDTO> getAllCompanies() {
 		List<Company> companyList = companyRepository.findAll();
-		log.debug("Requested all companies. Returned %d items.", companyList.size());
+		log.debug("Requested all companies. Returned " + companyList.size() + " items.");
 		return modelMapper.map(companyList, new TypeToken<List<CompanyDTO>>() {
 		}.getType());
 	}
@@ -61,7 +61,7 @@ public class CompanyService {
 	 */
 	@Transactional(readOnly = true)
 	public CompanyDTO getCompanyById(Long companyId) {
-		log.debug("Requested company with ID: %d.", companyId);
+		log.debug("Requested company with ID: " + companyId);
 		Company company = companyRepository.getReferenceById(companyId);
 		return modelMapper.map(company, CompanyDTO.class);
 	}
@@ -73,11 +73,12 @@ public class CompanyService {
 	 * @return the total monthly expenses for the company
 	 */
 	@Transactional(readOnly = true)
-	public BigDecimal getMonthlyExpenses(int companyId) {
+	public BigDecimal getMonthlyExpenses(Long companyId) {
 		List<EmployeeDTO> employeesDTO = modelMapper.map(employeeService.getCompanyEmployees(companyId),
 				new TypeToken<List<EmployeeDTO>>() {
 				}.getType());
-		log.debug("Requested expenses for company with ID: %d and %d employees.", companyId, employeesDTO.size());
+		log.debug(
+				"Requested expenses for company with ID: " + companyId + " and " + employeesDTO.size() + " employees.");
 		return employeesDTO.stream().map(EmployeeDTO::getSalary).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 

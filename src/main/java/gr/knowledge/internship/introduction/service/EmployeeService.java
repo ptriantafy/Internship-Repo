@@ -43,7 +43,7 @@ public class EmployeeService {
 	@Transactional(readOnly = true)
 	public List<EmployeeDTO> getAllEmployees() {
 		List<Employee> employeeList = employeeRepository.findAll();
-		log.debug("Requested all employees. Returned %d items.", employeeList.size());
+		log.debug("Requested all employees. Returned " + employeeList.size() + " items.");
 		return modelMapper.map(employeeList, new TypeToken<List<EmployeeDTO>>() {
 		}.getType());
 	}
@@ -55,8 +55,8 @@ public class EmployeeService {
 	 * @return a list of employees belonging to the specified company
 	 */
 	@Transactional(readOnly = true)
-	public List<EmployeeDTO> getCompanyEmployees(int companyId) {
-		log.debug("Asked for all employees of company with id: %d", companyId);
+	public List<EmployeeDTO> getCompanyEmployees(Long companyId) {
+		log.debug("Asked for all employees of company with id: " + companyId);
 		return modelMapper.map(employeeRepository.findByCompanyId(companyId), new TypeToken<List<EmployeeDTO>>() {
 		}.getType());
 	}
@@ -70,7 +70,7 @@ public class EmployeeService {
 	@Transactional(readOnly = true)
 	public EmployeeDTO getEmployeeById(Long employeeId) {
 		Employee employee = employeeRepository.getReferenceById(employeeId);
-		log.debug("Asked for employee with id: %d", employeeId);
+		log.debug("Asked for employee with id: " + employeeId);
 		return modelMapper.map(employee, EmployeeDTO.class);
 	}
 

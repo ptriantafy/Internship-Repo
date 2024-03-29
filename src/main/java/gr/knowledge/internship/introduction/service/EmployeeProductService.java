@@ -53,7 +53,7 @@ public class EmployeeProductService {
 	@Transactional(readOnly = true)
 	public List<EmployeeProductDTO> getAllEmployeeProducts() {
 		List<EmployeeProduct> employeeProducts = employeeProductRepository.findAll();
-		log.debug("Requested all employee-products. Returned %d items.", employeeProducts.size());
+		log.debug("Requested all employee-products. Returned " + employeeProducts.size() + " items.");
 		return modelMapper.map(employeeProducts, new TypeToken<List<EmployeeProductDTO>>() {
 		}.getType());
 	}
@@ -76,7 +76,7 @@ public class EmployeeProductService {
 			mapKey.fromEmployee(currEmployee);
 			outMap.put(mapKey, extractProductsOfEmployee(currEmployee.getId(), unformattedProductList));
 		}
-		log.debug("Returned all company products of company with id: %d. Entries: &d", companyId, outMap.size());
+		log.debug("Returned all company products of company with id:" + companyId + ". Entries: " + outMap.size());
 		return outMap;
 	}
 
@@ -89,7 +89,7 @@ public class EmployeeProductService {
 	@Transactional(readOnly = true)
 	public EmployeeProductDTO getEmployeeProductById(Long employeeProductId) {
 		EmployeeProduct employeeProduct = employeeProductRepository.getReferenceById(employeeProductId);
-		log.debug("Requested employee-product with id: %d", employeeProductId);
+		log.debug("Requested employee-product with id: " + employeeProductId);
 		return modelMapper.map(employeeProduct, EmployeeProductDTO.class);
 	}
 
